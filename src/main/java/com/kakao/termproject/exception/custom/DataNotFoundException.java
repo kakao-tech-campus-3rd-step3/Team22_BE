@@ -1,4 +1,4 @@
-package com.kakao.termproject.common.exceptions;
+package com.kakao.termproject.exception.custom;
 
 public class DataNotFoundException extends RuntimeException {
 

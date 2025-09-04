@@ -1,7 +1,11 @@
-package com.kakao.termproject.common;
+package com.kakao.termproject.exception;
 
 import org.springframework.http.HttpStatus;
 
-public record ErrorResult(HttpStatus status, String message) {
+public record ErrorResult(
+  HttpStatus status,
+  String message,
+  StackTraceElement[] stackTraceElements
+) {
 
 }
