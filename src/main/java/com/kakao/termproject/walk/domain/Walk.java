@@ -19,4 +19,8 @@ public class Walk {
 
   @Column(columnDefinition = "TEXT")
   private String walk;
+
+  public Walk(String walk) {
+    this.walk = walk;
+  }
 }

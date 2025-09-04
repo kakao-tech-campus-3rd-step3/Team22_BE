@@ -1,11 +1,37 @@
 package com.kakao.termproject.walk.dto;
 
-public record WalkData(Routes routes) {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-  record Routes(Sections sections) {
+public record WalkData(@JsonProperty("routes") Routes routes) {
 
-    record Sections(double[] departure, double[] arrival, Integer distance, Integer duration) {
+  public record Routes(@JsonProperty("sections") Sections sections) {
 
+    public record Sections(
+      @JsonProperty("departure") Departure departure,
+      @JsonProperty("arrival") Arrival arrival,
+      @JsonProperty("distance") Integer distance,
+      @JsonProperty("duration") Integer duration
+    ) {
+
+      public record Departure(
+        @JsonProperty("lng") double lng,
+        @JsonProperty("lat") double lat
+      ) {
+
+      }
+
+      public record Arrival(
+        @JsonProperty("lng") double lng,
+        @JsonProperty("lat") double lat
+      ) {
+
+      }
     }
+  }
+
+  @JsonCreator
+  public WalkData(@JsonProperty("routes") Routes routes) {
+    this.routes = routes;
   }
 }
