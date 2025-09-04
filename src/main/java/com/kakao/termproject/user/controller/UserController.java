@@ -2,8 +2,10 @@ package com.kakao.termproject.user.controller;
 
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
+import com.kakao.termproject.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,13 +24,15 @@ public class UserController {
   public ResponseEntity<String> register(
       @RequestBody RegisterRequest request)
   {
-    return userService.register(request);
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(userService.register(request));
   }
 
   @PostMapping("/login")
   public ResponseEntity<String> login(
       @RequestBody LoginRequest request
   ){
-    return userService.login(request);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(userService.login(request));
   }
 }
