@@ -12,5 +12,7 @@ spring:
       hibernate:
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
-  jwt:
-    secret: ${JWT_SECRET}
+jwt:
+  secret: ${JWT_SECRET}
+  accessTokenExpirationTime: 1800000 #30분
+  refreshTokenExpitaionTime: 5184000000 #2달
