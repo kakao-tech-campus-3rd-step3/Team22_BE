@@ -1,6 +1,7 @@
 package com.kakao.termproject.exception;
 
 import com.kakao.termproject.exception.custom.DataNotFoundException;
+import com.kakao.termproject.exception.custom.EmailDuplicationException;
 import com.kakao.termproject.exception.custom.JsonParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,19 @@ public class GlobalExceptionHandler {
         e.getStackTrace()
       ),
       HttpStatus.BAD_REQUEST
+    );
+  }
+
+  @ResponseStatus(HttpStatus.CONFLICT)
+  @ExceptionHandler(value = EmailDuplicationException.class)
+  public ResponseEntity<ErrorResult> emailDuplicationException(EmailDuplicationException e) {
+    return new ResponseEntity<>(
+        new ErrorResult(
+            HttpStatus.CONFLICT,
+            e.getMessage(),
+            e.getStackTrace()
+        ),
+        HttpStatus.CONFLICT
     );
   }
 }
