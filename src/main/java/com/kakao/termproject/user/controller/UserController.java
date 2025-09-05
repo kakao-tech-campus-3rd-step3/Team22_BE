@@ -3,6 +3,7 @@ package com.kakao.termproject.user.controller;
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
 import com.kakao.termproject.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class UserController {
 
   @PostMapping("/register")
   public ResponseEntity<String> register(
-      @RequestBody RegisterRequest request)
+      @RequestBody @Valid RegisterRequest request)
   {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(userService.register(request));
@@ -30,7 +31,7 @@ public class UserController {
 
   @PostMapping("/login")
   public ResponseEntity<String> login(
-      @RequestBody LoginRequest request
+      @RequestBody @Valid LoginRequest request
   ){
     return ResponseEntity.status(HttpStatus.OK)
         .body(userService.login(request));
