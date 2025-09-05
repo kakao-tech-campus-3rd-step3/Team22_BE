@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+    defer-datasource-initialization: true
+
+openweathermap:
+  api:
+    key: ${OPENWEATHERMAP_API_KEY}
+
+jwt:
+  secret: ${JWT_SECRET}
+  accessTokenExpirationTime: 1800000 #30분
+  refreshTokenExpitaionTime: 5184000000 #2달
