@@ -16,3 +16,8 @@ spring:
 openweathermap:
   api:
     key: ${OPENWEATHERMAP_API_KEY}
+
+jwt:
+  secret: ${JWT_SECRET}
+  accessTokenExpirationTime: 1800000 #30분
+  refreshTokenExpitaionTime: 5184000000 #2달
