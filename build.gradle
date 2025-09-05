@@ -37,6 +37,14 @@ dependencies {
 
 	// mysql
 	implementation 'com.mysql:mysql-connector-j:8.3.0'
+
+	//encrypt
+	implementation 'org.mindrot:jbcrypt:0.4'
+
+	//jwt
+	compileOnly 'io.jsonwebtoken:jjwt-api:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 }
 
 tasks.named('test') {

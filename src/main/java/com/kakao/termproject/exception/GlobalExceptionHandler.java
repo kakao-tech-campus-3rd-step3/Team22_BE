@@ -1,7 +1,10 @@
 package com.kakao.termproject.exception;
 
 import com.kakao.termproject.exception.custom.DataNotFoundException;
+import com.kakao.termproject.exception.custom.EmailDuplicationException;
+import com.kakao.termproject.exception.custom.InvalidPasswordException;
 import com.kakao.termproject.exception.custom.JsonParseException;
+import com.kakao.termproject.exception.custom.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,6 +37,45 @@ public class GlobalExceptionHandler {
         e.getStackTrace()
       ),
       HttpStatus.BAD_REQUEST
+    );
+  }
+
+  @ResponseStatus(HttpStatus.CONFLICT)
+  @ExceptionHandler(value = EmailDuplicationException.class)
+  public ResponseEntity<ErrorResult> emailDuplicationException(EmailDuplicationException e) {
+    return new ResponseEntity<>(
+        new ErrorResult(
+            HttpStatus.CONFLICT,
+            e.getMessage(),
+            e.getStackTrace()
+        ),
+        HttpStatus.CONFLICT
+    );
+  }
+
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  @ExceptionHandler(value = InvalidPasswordException.class)
+  public ResponseEntity<ErrorResult> invalidPasswordException(InvalidPasswordException e) {
+    return new ResponseEntity<>(
+        new ErrorResult(
+            HttpStatus.UNAUTHORIZED,
+            e.getMessage(),
+            e.getStackTrace()
+        ),
+        HttpStatus.UNAUTHORIZED
+    );
+  }
+
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  @ExceptionHandler(value = UserNotFoundException.class)
+  public ResponseEntity<ErrorResult> userNotFoundException(UserNotFoundException e) {
+    return new ResponseEntity<>(
+        new ErrorResult(
+            HttpStatus.UNAUTHORIZED,
+            e.getMessage(),
+            e.getStackTrace()
+        ),
+        HttpStatus.UNAUTHORIZED
     );
   }
 }
