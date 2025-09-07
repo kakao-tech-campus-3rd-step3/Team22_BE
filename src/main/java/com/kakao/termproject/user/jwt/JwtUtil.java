@@ -14,11 +14,18 @@ public class JwtUtil {
 
   private final String secretKey;
 
-  public JwtUtil(@Value("${jwt.secret}") String secretKey) {
+  private final long accessTokenExpirationTime;
+  private final long refreshTokenExpirationTime;
+
+  public JwtUtil(@Value("${jwt.secret}") String secretKey,
+      @Value("${jwt.accessTokenExpirationTime}") long accessTokenExpirationTime,
+      @Value("${jwt.refreshTokenExpitaionTime") long refreshTokenExpirationTime) {
     this.secretKey = secretKey;
+    this.accessTokenExpirationTime = accessTokenExpirationTime;
+    this.refreshTokenExpirationTime = refreshTokenExpirationTime;
   }
 
-  public String createToken(User user, long expirationTime) {
+  public String createAccessToken(User user) {
     return Jwts.builder()
         .header()
         .add("typ", "JWT")
@@ -26,7 +33,20 @@ public class JwtUtil {
         .claim("email", user.getEmail())
         .claim("username", user.getUsername())
         .issuedAt(new Date(System.currentTimeMillis()))
-        .expiration(new Date(System.currentTimeMillis() + expirationTime)) //30분
+        .expiration(new Date(System.currentTimeMillis() + accessTokenExpirationTime)) //30분
+        .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+        .compact();
+  }
+
+  public String createRefreshToken(User user) {
+    return Jwts.builder()
+        .header()
+        .add("typ", "JWT")
+        .and()
+        .claim("email", user.getEmail())
+        .claim("username", user.getUsername())
+        .issuedAt(new Date(System.currentTimeMillis()))
+        .expiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime)) //60일
         .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
         .compact();
   }
