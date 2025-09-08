@@ -8,21 +8,16 @@ import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
 import com.kakao.termproject.user.jwt.JwtUtil;
 import com.kakao.termproject.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
   private final UserRepository userRepository;
   private final JwtUtil jwtUtil;
-
-  public UserService(
-      UserRepository userRepository,
-      JwtUtil jwtUtil) {
-    this.userRepository = userRepository;
-    this.jwtUtil = jwtUtil;
-  }
 
   public String register(RegisterRequest request) {
 
