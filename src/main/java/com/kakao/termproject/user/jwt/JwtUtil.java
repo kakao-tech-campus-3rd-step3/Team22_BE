@@ -3,6 +3,8 @@ package com.kakao.termproject.user.jwt;
 import com.kakao.termproject.user.domain.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,18 +14,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-  private final String secretKey;
+  @Value("${jwt.secret}")
+  private String secretKey;
 
-  private final long accessTokenExpirationTime;
-  private final long refreshTokenExpirationTime;
+  @Value("${jwt.accessTokenExpirationTime}")
+  private Duration accessTokenExpirationTime;
 
-  public JwtUtil(@Value("${jwt.secret}") String secretKey,
-      @Value("${jwt.accessTokenExpirationTime}") long accessTokenExpirationTime,
-      @Value("${jwt.refreshTokenExpitaionTime") long refreshTokenExpirationTime) {
-    this.secretKey = secretKey;
-    this.accessTokenExpirationTime = accessTokenExpirationTime;
-    this.refreshTokenExpirationTime = refreshTokenExpirationTime;
-  }
+  @Value("${jwt.refreshTokenExpitaionTime")
+  private Duration refreshTokenExpirationTime;
+
+
 
   public String createAccessToken(User user) {
     return Jwts.builder()
@@ -33,7 +33,7 @@ public class JwtUtil {
         .claim("email", user.getEmail())
         .claim("username", user.getUsername())
         .issuedAt(new Date(System.currentTimeMillis()))
-        .expiration(new Date(System.currentTimeMillis() + accessTokenExpirationTime)) //30분
+        .expiration(Date.from(Instant.now().plus(accessTokenExpirationTime)))
         .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
         .compact();
   }
@@ -46,7 +46,7 @@ public class JwtUtil {
         .claim("email", user.getEmail())
         .claim("username", user.getUsername())
         .issuedAt(new Date(System.currentTimeMillis()))
-        .expiration(new Date(System.currentTimeMillis() + refreshTokenExpirationTime)) //60일
+        .expiration(Date.from(Instant.now().plus(refreshTokenExpirationTime)))
         .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
         .compact();
   }
