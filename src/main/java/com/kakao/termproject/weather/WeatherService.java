@@ -1,6 +1,7 @@
 package com.kakao.termproject.weather;
 
 import com.kakao.termproject.weather.dto.WeatherApiResponse;
+import com.kakao.termproject.weather.dto.WeatherRequest;
 import com.kakao.termproject.weather.dto.WeatherResponse;
 import java.net.URI;
 import java.util.List;
@@ -20,14 +21,14 @@ public class WeatherService {
 
   private final RestTemplate restTemplate;
 
-  public WeatherResponse getWeatherDetail(double lat, double lon, int cnt) {
+  public WeatherResponse getWeatherDetail(WeatherRequest request) {
     URI uri = UriComponentsBuilder
         .fromHttpUrl("https://api.openweathermap.org/data/2.5/forecast")
-        .queryParam("lat", lat)
-        .queryParam("lon", lon)
+        .queryParam("lat", request.lat())
+        .queryParam("lon", request.lon())
         .queryParam("units", "metric")
         .queryParam("appid", apiKey)
-        .queryParam("cnt", cnt)
+        .queryParam("cnt", request.cnt())
         .build()
         .toUri();
 
