@@ -20,43 +20,42 @@ public class JwtUtil {
   @Value("${jwt.accessTokenExpirationTime}")
   private Duration accessTokenExpirationTime;
 
-  @Value("${jwt.refreshTokenExpitaionTime")
+  @Value("${jwt.refreshTokenExpirationTime}")
   private Duration refreshTokenExpirationTime;
-
 
 
   public String createAccessToken(User user) {
     return Jwts.builder()
-        .header()
-        .add("typ", "JWT")
-        .and()
-        .claim("email", user.getEmail())
-        .claim("username", user.getUsername())
-        .issuedAt(new Date(System.currentTimeMillis()))
-        .expiration(Date.from(Instant.now().plus(accessTokenExpirationTime)))
-        .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
-        .compact();
+      .header()
+      .add("typ", "JWT")
+      .and()
+      .claim("email", user.getEmail())
+      .claim("username", user.getUsername())
+      .issuedAt(new Date(System.currentTimeMillis()))
+      .expiration(Date.from(Instant.now().plus(accessTokenExpirationTime)))
+      .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+      .compact();
   }
 
   public String createRefreshToken(User user) {
     return Jwts.builder()
-        .header()
-        .add("typ", "JWT")
-        .and()
-        .claim("email", user.getEmail())
-        .claim("username", user.getUsername())
-        .issuedAt(new Date(System.currentTimeMillis()))
-        .expiration(Date.from(Instant.now().plus(refreshTokenExpirationTime)))
-        .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
-        .compact();
+      .header()
+      .add("typ", "JWT")
+      .and()
+      .claim("email", user.getEmail())
+      .claim("username", user.getUsername())
+      .issuedAt(new Date(System.currentTimeMillis()))
+      .expiration(Date.from(Instant.now().plus(refreshTokenExpirationTime)))
+      .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+      .compact();
   }
 
-  public boolean verifyToken(String token){
-    try{
+  public boolean verifyToken(String token) {
+    try {
       Jwts.parser()
-          .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
-          .build()
-          .parseSignedClaims(token);
+        .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+        .build()
+        .parseSignedClaims(token);
       return true;
     } catch (Exception e) {
       return false;
