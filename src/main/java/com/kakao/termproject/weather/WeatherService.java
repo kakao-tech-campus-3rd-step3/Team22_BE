@@ -23,7 +23,7 @@ public class WeatherService {
 
   public WeatherResponse getWeatherDetail(WeatherRequest request) {
     URI uri = UriComponentsBuilder
-        .fromHttpUrl("https://api.openweathermap.org/data/2.5/forecast")
+        .fromHttpUrl("https://pro.openweathermap.org/data/2.5/forecast/hourly")
         .queryParam("lat", request.lat())
         .queryParam("lon", request.lon())
         .queryParam("units", "metric")
