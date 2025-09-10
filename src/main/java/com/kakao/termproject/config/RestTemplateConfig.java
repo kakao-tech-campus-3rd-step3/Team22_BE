@@ -1,5 +1,6 @@
-package com.kakao.termproject.weather;
+package com.kakao.termproject.config;
 
+import com.kakao.termproject.exception.RestTemplateResponseErrorHandler;
 import java.time.Duration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

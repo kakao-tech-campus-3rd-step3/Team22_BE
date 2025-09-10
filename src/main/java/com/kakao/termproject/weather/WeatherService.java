@@ -1,16 +1,19 @@
 package com.kakao.termproject.weather;
 
 import com.kakao.termproject.weather.dto.WeatherApiResponse;
+import com.kakao.termproject.weather.dto.WeatherRequest;
 import com.kakao.termproject.weather.dto.WeatherResponse;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
+@RequiredArgsConstructor
 public class WeatherService {
 
   @Value("${openweathermap.api.key}")
@@ -18,18 +21,14 @@ public class WeatherService {
 
   private final RestTemplate restTemplate;
 
-  public WeatherService(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
-  }
-
-  public WeatherResponse getWeatherDetail(double lat, double lon, int cnt) {
+  public WeatherResponse getWeatherDetail(WeatherRequest request) {
     URI uri = UriComponentsBuilder
         .fromHttpUrl("https://api.openweathermap.org/data/2.5/forecast")
-        .queryParam("lat", lat)
-        .queryParam("lon", lon)
+        .queryParam("lat", request.lat())
+        .queryParam("lon", request.lon())
         .queryParam("units", "metric")
         .queryParam("appid", apiKey)
-        .queryParam("cnt", cnt)
+        .queryParam("cnt", request.cnt())
         .build()
         .toUri();
 
