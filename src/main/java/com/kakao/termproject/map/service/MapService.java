@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,6 +22,9 @@ public class MapService {
 
   private final RestTemplate restTemplate;
   private final ObjectMapper objectMapper;
+
+  @Value("${map.key}")
+  private String key;
 
   public MapResponse getFitness(MapRequest request) {
     JsonNode response = getResponse(request.parameter());
@@ -34,6 +38,7 @@ public class MapService {
     URI uri = UriComponentsBuilder
       .fromUriString("https://maps.googleapis.com/maps/api/elevation/json")
       .queryParam("locations", parameter)
+      .queryParam("key", key)
       .build()
       .toUri();
 
@@ -62,10 +67,11 @@ public class MapService {
     List<Double> distances = new ArrayList<>();
 
     for (JsonNode coordinate : data) {
+      coordinate = coordinate.get("location");
       coordinates.add(
         new Coordinate(
-          coordinate.get("latitude").asDouble(),
-          coordinate.get("longitude").asDouble()
+          coordinate.get("lat").asDouble(),
+          coordinate.get("lng").asDouble()
         )
       );
     }
@@ -92,7 +98,11 @@ public class MapService {
       }
     }
 
-    double avgOfSlope = (sumSlope / (elevations.size() - 1));
+    double avgOfSlope = sumSlope;
+
+    if (elevations.size() > 1) {
+      avgOfSlope /= (elevations.size() - 1);
+    }
 
     avgOfSlope *= 100;
     maxSlope *= 100;
