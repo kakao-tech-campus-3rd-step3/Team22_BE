@@ -117,7 +117,7 @@ public class MapService {
     double lonDistance = Math.toRadians(location2.longitude() - location1.longitude());
 
     double sinLatHalfSquared = Math.sin(latDistance / 2) * Math.sin(latDistance / 2);
-    double sinLonHalfSquared = Math.cos(lonDistance / 2) * Math.cos(lonDistance / 2);
+    double sinLonHalfSquared = Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
 
     double location1Radians = Math.toRadians(location1.latitude());
     double location2Radians = Math.toRadians(location2.latitude());
