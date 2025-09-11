@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,7 +48,14 @@ public class Pet {
   @Column(precision = 5, scale = 2, nullable = false)
   private BigDecimal weight;
 
-  public Pet(String name, String gender, String birthDate, boolean isNeutered, boolean isVaccinated, String preferredWeather, BigDecimal weight){
+  @Builder
+  public Pet(
+      String name,
+      String gender,
+      String birthDate,
+      boolean isNeutered,
+      boolean isVaccinated,
+      BigDecimal weight){
     this.name = name;
     this.gender = gender;
     this.birthDate = birthDate;
