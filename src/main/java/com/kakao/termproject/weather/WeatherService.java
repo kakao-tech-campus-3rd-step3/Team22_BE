@@ -1,8 +1,11 @@
 package com.kakao.termproject.weather;
 
 import com.kakao.termproject.weather.dto.WeatherApiResponse;
+import com.kakao.termproject.weather.dto.WeatherApiResponse.WeatherApiForecastItem;
 import com.kakao.termproject.weather.dto.WeatherRequest;
 import com.kakao.termproject.weather.dto.WeatherResponse;
+import com.kakao.termproject.weather.dto.WeatherResponse.HourlyForecast;
+import com.kakao.termproject.weather.dto.WeatherResponse.HourlyForecast.WeatherDetail;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,15 +21,16 @@ public class WeatherService {
 
   @Value("${openweathermap.api.key}")
   private String apiKey;
-
   private final RestTemplate restTemplate;
+
+  private final String units = "metric"; //섭씨
 
   public WeatherResponse getWeatherDetail(WeatherRequest request) {
     URI uri = UriComponentsBuilder
         .fromHttpUrl("https://pro.openweathermap.org/data/2.5/forecast/hourly")
         .queryParam("lat", request.lat())
         .queryParam("lon", request.lon())
-        .queryParam("units", "metric")
+        .queryParam("units", units)
         .queryParam("appid", apiKey)
         .queryParam("cnt", request.cnt())
         .build()
@@ -34,16 +38,28 @@ public class WeatherService {
 
     WeatherApiResponse apiResponse = restTemplate.getForObject(uri, WeatherApiResponse.class);
 
-    List<WeatherResponse.WeatherItem> items = apiResponse.list().stream()
-        .map(item -> new WeatherResponse.WeatherItem(
-            item.dateTime(),
-            WeatherCondition.from(item.weather().get(0).main(), item.sys().pod()),
-            item.main().temp(),
-            item.precipitationProbability(),
-            item.wind().speed()
-        ))
+    List<HourlyForecast> items = apiResponse.list().stream()
+        .map(this::convertToHourlyForecast)
         .collect(Collectors.toList());
 
     return new WeatherResponse(items);
   }
+
+  private HourlyForecast convertToHourlyForecast(WeatherApiForecastItem item) {
+    WeatherDetail detail = new WeatherDetail(item.dateTime(),
+        WeatherCondition.from(item.weather().get(0).main(), item.sys().pod()),
+        item.main().temp(),
+        item.main().humidity(),
+        item.precipitationProbability(),
+        item.wind().speed(),
+        item.wind().deg());
+
+    return new HourlyForecast(detail, calculateWalkScore(detail));
+  }
+
+  private int calculateWalkScore(WeatherDetail detail) {
+
+    return 1;
+  }
+
 }
