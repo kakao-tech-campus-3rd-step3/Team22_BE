@@ -7,6 +7,10 @@ import com.kakao.termproject.weather.dto.WeatherResponse;
 import com.kakao.termproject.weather.dto.WeatherResponse.HourlyForecast;
 import com.kakao.termproject.weather.dto.WeatherResponse.HourlyForecast.WeatherDetail;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +49,14 @@ public class WeatherService {
     return new WeatherResponse(items);
   }
 
+  private int calculateWalkScore(WeatherDetail detail) {
+
+    return 1;
+  }
+
   private HourlyForecast convertToHourlyForecast(WeatherApiForecastItem item) {
-    WeatherDetail detail = new WeatherDetail(item.dateTime(),
+    WeatherDetail detail = new WeatherDetail(
+        convertUtcToKst(item.dateTime()),
         WeatherCondition.from(item.weather().get(0).main(), item.sys().pod()),
         item.main().temp(),
         item.main().humidity(),
@@ -57,9 +67,12 @@ public class WeatherService {
     return new HourlyForecast(detail, calculateWalkScore(detail));
   }
 
-  private int calculateWalkScore(WeatherDetail detail) {
-
-    return 1;
+  private String convertUtcToKst(String utcDateTimeStr) {
+    final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    LocalDateTime localDateTime = LocalDateTime.parse(utcDateTimeStr, FORMATTER);
+    ZonedDateTime utcZoned = localDateTime.atZone(ZoneId.of("UTC"));
+    ZonedDateTime kstZoned = utcZoned.withZoneSameInstant(ZoneId.of("Asia/Seoul"));
+    return kstZoned.format(FORMATTER);
   }
 
 }
