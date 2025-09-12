@@ -28,6 +28,9 @@ public class Pet {
   private String gender;
 
   @Column(nullable = false)
+  private String breed;
+
+  @Column(nullable = false)
   private String birthDate;
 
   @Column(nullable = false)
@@ -52,15 +55,63 @@ public class Pet {
   public Pet(
       String name,
       String gender,
+      String breed,
       String birthDate,
       boolean isNeutered,
       boolean isVaccinated,
-      BigDecimal weight){
+      BigDecimal weight,
+      String preferredWeather,
+      String preferredPath,
+      String chronicDisease){
     this.name = name;
     this.gender = gender;
+    this.breed = breed;
     this.birthDate = birthDate;
     this.isNeutered = isNeutered;
     this.isVaccinated = isVaccinated;
     this.weight = weight;
+    this.preferredWeather = preferredWeather;
+    this.preferredPath = preferredPath;
+    this.chronicDisease = chronicDisease;
+  }
+
+  public void changeName(String name) {
+    this.name = name;
+  }
+
+  public void changeGender(String gender) {
+    this.gender = gender;
+  }
+
+  public void changeBreed(String breed) {
+    this.breed = breed;
+  }
+
+  public void changeBirthDate(String birthDate) {
+    this.birthDate = birthDate;
+  }
+
+  public void changeIsNeutered(Boolean isNeutered) {
+    this.isNeutered = isNeutered;
+  }
+
+  public void changeIsVaccinated(Boolean isVaccinated) {
+    this.isVaccinated = isVaccinated;
+  }
+
+  public void changeWeight(BigDecimal weight) {
+    this.weight = weight;
+  }
+
+  public void changePreferredWeather(String preferredWeather) {
+    this.preferredWeather = preferredWeather;
+  }
+
+  public void changeChronicDisease(String chronicDisease) {
+    this.chronicDisease = chronicDisease;
+  }
+
+  public void changePreferredPath(String preferredPath) {
+    this.preferredPath = preferredPath;
   }
 }
