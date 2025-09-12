@@ -44,3 +44,6 @@ springdoc:
   cache:
     disabled: true
   show-actuator: false
+
+map:
+  key: ${GCP_KEY}
