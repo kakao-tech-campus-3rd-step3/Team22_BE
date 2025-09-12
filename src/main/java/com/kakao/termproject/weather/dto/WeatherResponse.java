@@ -1,6 +1,7 @@
 package com.kakao.termproject.weather.dto;
 
 import com.kakao.termproject.weather.WeatherCondition;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record WeatherResponse(List<HourlyForecast> items) {
@@ -11,7 +12,7 @@ public record WeatherResponse(List<HourlyForecast> items) {
   ) {
 
     public record WeatherDetail(
-        String time,
+        LocalDateTime time,
         WeatherCondition condition,
         double temperature,
         int humidity,

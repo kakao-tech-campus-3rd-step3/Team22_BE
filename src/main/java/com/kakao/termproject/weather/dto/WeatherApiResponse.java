@@ -8,6 +8,7 @@ public record WeatherApiResponse(
 ) {
 
   public record WeatherApiForecastItem(
+      @JsonProperty("dt") Long dt,
       @JsonProperty("dt_txt") String dateTime,
       Main main,
       List<Weather> weather,
