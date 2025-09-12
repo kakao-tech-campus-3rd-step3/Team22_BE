@@ -1,16 +1,21 @@
 package com.kakao.termproject.user.domain;
 
 
+import com.kakao.termproject.pet.domain.Pet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class User {
 
@@ -26,6 +31,11 @@ public class User {
 
   @Column(nullable = false)
   private String password;
+
+  @Setter
+  @OneToOne
+  @JoinColumn(name = "pet_id", unique = true)
+  private Pet pet;
 
   public User(String email, String username, String password) {
     this.email = email;

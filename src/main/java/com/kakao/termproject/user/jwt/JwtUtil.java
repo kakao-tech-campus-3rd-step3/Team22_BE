@@ -3,6 +3,8 @@ package com.kakao.termproject.user.jwt;
 import com.kakao.termproject.user.domain.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,31 +14,48 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-  private final String secretKey;
+  @Value("${jwt.secret}")
+  private String secretKey;
 
-  public JwtUtil(@Value("${jwt.secret}") String secretKey) {
-    this.secretKey = secretKey;
-  }
+  @Value("${jwt.accessTokenExpirationTime}")
+  private Duration accessTokenExpirationTime;
 
-  public String createToken(User user, long expirationTime) {
+  @Value("${jwt.refreshTokenExpirationTime}")
+  private Duration refreshTokenExpirationTime;
+
+
+  public String createAccessToken(User user) {
     return Jwts.builder()
-        .header()
-        .add("typ", "JWT")
-        .and()
-        .claim("email", user.getEmail())
-        .claim("username", user.getUsername())
-        .issuedAt(new Date(System.currentTimeMillis()))
-        .expiration(new Date(System.currentTimeMillis() + expirationTime)) //30분
-        .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
-        .compact();
+      .header()
+      .add("typ", "JWT")
+      .and()
+      .claim("email", user.getEmail())
+      .claim("username", user.getUsername())
+      .issuedAt(new Date(System.currentTimeMillis()))
+      .expiration(Date.from(Instant.now().plus(accessTokenExpirationTime)))
+      .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+      .compact();
   }
 
-  public boolean verifyToken(String token){
-    try{
+  public String createRefreshToken(User user) {
+    return Jwts.builder()
+      .header()
+      .add("typ", "JWT")
+      .and()
+      .claim("email", user.getEmail())
+      .claim("username", user.getUsername())
+      .issuedAt(new Date(System.currentTimeMillis()))
+      .expiration(Date.from(Instant.now().plus(refreshTokenExpirationTime)))
+      .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+      .compact();
+  }
+
+  public boolean verifyToken(String token) {
+    try {
       Jwts.parser()
-          .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
-          .build()
-          .parseSignedClaims(token);
+        .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+        .build()
+        .parseSignedClaims(token);
       return true;
     } catch (Exception e) {
       return false;

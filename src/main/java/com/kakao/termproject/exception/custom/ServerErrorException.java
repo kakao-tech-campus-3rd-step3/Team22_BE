@@ -1,4 +1,4 @@
-package com.kakao.termproject.weather.exception;
+package com.kakao.termproject.exception.custom;
 
 import org.springframework.http.HttpStatusCode;
 

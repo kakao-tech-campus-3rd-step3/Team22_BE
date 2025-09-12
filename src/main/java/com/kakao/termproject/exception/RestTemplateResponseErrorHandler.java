@@ -1,16 +1,18 @@
-package com.kakao.termproject.weather;
+package com.kakao.termproject.exception;
 
-import com.kakao.termproject.weather.exception.ClientErrorException;
-import com.kakao.termproject.weather.exception.ServerErrorException;
+import com.kakao.termproject.exception.custom.ClientErrorException;
+import com.kakao.termproject.exception.custom.ServerErrorException;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 
+@Slf4j
 @Component
 public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
@@ -24,6 +26,10 @@ public class RestTemplateResponseErrorHandler implements ResponseErrorHandler {
       throws IOException {
     HttpStatusCode statusCode = response.getStatusCode();
     String responseBody = new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8);
+
+    // 로그 추가
+    log.error("API call failed. url={}, method={}, statusCode={}, responseBody={}",
+        url, method, statusCode, responseBody);
 
     if (statusCode.is5xxServerError()) {
       throw new ServerErrorException(statusCode, responseBody);
