@@ -88,7 +88,13 @@ public class MapService {
     double sumSlope = 0.0;
 
     for (int i = 0; i < elevations.size() - 1; i++) {
-      double currentSlope = (elevations.get(i + 1) - elevations.get(i)) / distances.get(i);
+
+      if (Double.compare(distances.get(i), 0.0) <= 0) {
+        continue;
+      }
+
+      double currentSlope = elevations.get(i + 1) - elevations.get(i) / distances.get(i);
+
       currentSlope = Math.abs(currentSlope);
 
       sumSlope += currentSlope;
