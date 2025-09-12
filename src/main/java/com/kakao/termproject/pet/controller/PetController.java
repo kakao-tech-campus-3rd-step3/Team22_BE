@@ -24,7 +24,7 @@ public class PetController {
 
   private final PetService petService;
 
-  @PatchMapping("/{petId}}")
+  @PatchMapping("/{petId}")
   public ResponseEntity<Void> updatePet(
       @PathVariable("petId") Long petId,
       @RequestBody @Valid PetUpdateRequest request
@@ -33,7 +33,7 @@ public class PetController {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-  @GetMapping("/{petId}}")
+  @GetMapping("/{petId}")
   public ResponseEntity<Pet> getPet(
       @PathVariable("petId") Long petId
   ){
@@ -41,7 +41,7 @@ public class PetController {
         .body(petService.get(petId));
   }
 
-  @DeleteMapping("/{petId}}")
+  @DeleteMapping("/{petId}")
   public ResponseEntity<Void> deletePet(
       @PathVariable("petId") Long petId
   ){
