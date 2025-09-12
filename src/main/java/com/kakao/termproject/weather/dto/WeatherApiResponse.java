@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public record WeatherApiResponse(
-    List<WeatherList> list
+    List<WeatherApiForecastItem> list
 ) {
 
-  public record WeatherList(
+  public record WeatherApiForecastItem(
+      @JsonProperty("dt") Long dt,
       @JsonProperty("dt_txt") String dateTime,
       Main main,
       List<Weather> weather,
@@ -19,20 +20,21 @@ public record WeatherApiResponse(
   }
 
   public record Main(
-      double temp
+      double temp,
+      int humidity
   ) {
 
   }
 
   public record Weather(
-      String main,
-      String description
+      String main
   ) {
 
   }
 
   public record Wind(
-      double speed
+      double speed,
+      int deg
   ) {
 
   }
