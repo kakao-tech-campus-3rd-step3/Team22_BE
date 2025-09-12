@@ -10,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,13 +38,10 @@ public class Pet {
   @Column(nullable = false)
   private boolean isVaccinated;
 
-  @Setter
   private String preferredWeather;
 
-  @Setter
   private String chronicDisease;
 
-  @Setter
   private String preferredPath;
 
   @Column(precision = 5, scale = 2, nullable = false)

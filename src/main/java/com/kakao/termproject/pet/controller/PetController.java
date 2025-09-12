@@ -41,7 +41,7 @@ public class PetController {
         .body(petService.get(petId));
   }
 
-  @DeleteMapping("/{petId}}")
+  @DeleteMapping("/{petId}")
   public ResponseEntity<Void> deletePet(
       @PathVariable("petId") Long petId
   ){
