@@ -56,6 +56,6 @@ public class UserService {
     User user = userRepository.findById(userId).
         orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
 
-    user.setPet(pet);
+    user.assignPet(pet);
   }
 }
