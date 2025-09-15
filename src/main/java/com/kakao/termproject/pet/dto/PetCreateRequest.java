@@ -1,5 +1,6 @@
 package com.kakao.termproject.pet.dto;
 
+import com.kakao.termproject.pet.domain.Gender;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -13,7 +14,7 @@ public record PetCreateRequest(
     String breed,
 
     @NotBlank
-    String gender,
+    Gender gender,
 
     @NotBlank
     String birthDate,
