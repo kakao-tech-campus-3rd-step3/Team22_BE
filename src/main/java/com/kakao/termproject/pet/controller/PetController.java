@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/pet")
+@RequestMapping("/api/pets")
 @RequiredArgsConstructor
 @Slf4j
 public class PetController {
