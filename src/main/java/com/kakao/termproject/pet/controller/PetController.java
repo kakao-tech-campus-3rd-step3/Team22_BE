@@ -37,8 +37,7 @@ public class PetController {
   public ResponseEntity<Pet> getPet(
       @PathVariable("petId") Long petId
   ){
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(petService.get(petId));
+    return ResponseEntity.ok(petService.get(petId));
   }
 
   @DeleteMapping("/{petId}")
