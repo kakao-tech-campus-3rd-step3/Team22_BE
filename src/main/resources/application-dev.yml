@@ -18,6 +18,8 @@ openweathermap:
     key: ${OPENWEATHERMAP_API_KEY}
   url: "https://pro.openweathermap.org/data/2.5/forecast/hourly"
 
+server:
+  forward-headers-strategy: native
 
 jwt:
   secret: ${JWT_SECRET}
@@ -32,6 +34,8 @@ springdoc:
 
   swagger-ui:
     enabled: true
+    urls:
+      - url: "https://spring-gift.store/v3/api-docs"
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
