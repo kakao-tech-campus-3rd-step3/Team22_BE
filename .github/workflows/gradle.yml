@@ -75,7 +75,7 @@ jobs:
             export DB_URL="${{ secrets.DB_URL }}"
             export DB_USERNAME="${{ secrets.DB_USERNAME }}"
             export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-            export OPENWEATHER_API_KEY="${{ secrets.OPENWEATHER_API_KEY }}"
+            export OPENWEATHERMAP_API_KEY="${{ secrets.OPENWEATHERMAP_API_KEY }}"
             export JWT_SECRET="${{ secrets.JWT_SECRET }}"
             export GCP_KEY="${{ secrets.GCP_KEY }}"
             sudo -E nohup java -jar build.jar > app.log 2>&1 &
