@@ -27,10 +27,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class WeatherService {
 
-  @Value("${openweathermap.api.key}")
-  private String apiKey;
   private final RestTemplate restTemplate;
   private final WalkScoreCalculator walkScoreCalculator;
+
+  @Value("${openweathermap.api.key}")
+  private String apiKey;
 
   public WeatherResponse getWeatherDetail(WeatherRequest request) {
     WeatherApiResponse weatherApiResponse = fetchWeatherApi(request);
@@ -74,7 +75,7 @@ public class WeatherService {
 
   private Map<Long, AirPollutionInfo> createPollutionInfoMap(
       AirPollutionApiResponse airApiResponse) {
-    return airApiResponse.airPollutionForecasts().stream()
+    return airApiResponse.list().stream()
         .collect(Collectors.toMap(
             AirPollutionApiResponse.AirPollutionForecastItem::dt,
             item -> new AirPollutionInfo(
@@ -86,7 +87,7 @@ public class WeatherService {
 
   private List<WeatherDetailInternal> createInternalForecasts(
       WeatherApiResponse weatherApiResponse, Map<Long, AirPollutionInfo> pollutionInfoMap) {
-    return weatherApiResponse.weatherForecasts().stream()
+    return weatherApiResponse.list().stream()
         .map(apiItem -> new WeatherDetailInternal(
             convertUtcToKst(apiItem.dateTime()),
             apiItem.main().temp(),
