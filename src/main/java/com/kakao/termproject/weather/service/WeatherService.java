@@ -74,7 +74,7 @@ public class WeatherService {
 
   private Map<Long, AirPollutionInfo> createPollutionInfoMap(
       AirPollutionApiResponse airApiResponse) {
-    return airApiResponse.list().stream()
+    return airApiResponse.airPollutionForecasts().stream()
         .collect(Collectors.toMap(
             AirPollutionApiResponse.AirPollutionForecastItem::dt,
             item -> new AirPollutionInfo(
@@ -86,7 +86,7 @@ public class WeatherService {
 
   private List<WeatherDetailInternal> createInternalForecasts(
       WeatherApiResponse weatherApiResponse, Map<Long, AirPollutionInfo> pollutionInfoMap) {
-    return weatherApiResponse.list().stream()
+    return weatherApiResponse.weatherForecasts().stream()
         .map(apiItem -> new WeatherDetailInternal(
             convertUtcToKst(apiItem.dateTime()),
             apiItem.main().temp(),
