@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class WalkScoreCalculator {
 
   public int calculateWalkScore(WeatherDetailInternal detail) {
-    int score = 0;
+    int score = 50;
 
     //기온/습도
     double temperature = detail.temperature();
