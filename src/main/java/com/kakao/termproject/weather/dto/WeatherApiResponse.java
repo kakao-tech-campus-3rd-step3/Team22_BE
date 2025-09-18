@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public record WeatherApiResponse(
-    List<WeatherApiForecastItem> list
+    List<WeatherApiForecastItem> weatherForecasts
 ) {
 
   public record WeatherApiForecastItem(

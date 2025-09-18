@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public record AirPollutionApiResponse(
-    List<AirPollutionForecastItem> list
+    List<AirPollutionForecastItem> airPollutionForecasts
 ) {
 
   public record AirPollutionForecastItem(
