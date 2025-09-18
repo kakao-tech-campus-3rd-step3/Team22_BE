@@ -16,6 +16,9 @@ spring:
 
 openweathermap:
   api:
+    base-url:
+      weather: https://pro.openweathermap.org/data/2.5/forecast/hourly
+      air-pollution: http://api.openweathermap.org/data/2.5/air_pollution/forecast
     key: ${OPENWEATHERMAP_API_KEY}
 
 jwt:

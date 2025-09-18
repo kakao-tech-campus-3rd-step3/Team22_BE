@@ -30,6 +30,12 @@ public class WeatherService {
   private final RestTemplate restTemplate;
   private final WalkScoreCalculator walkScoreCalculator;
 
+  @Value("${openweathermap.api.base-url.weather}")
+  private String weatherApiBaseUrl;
+
+  @Value("${openweathermap.api.base-url.air-pollution}")
+  private String airPollutionApiBaseUrl;
+
   @Value("${openweathermap.api.key}")
   private String apiKey;
 
@@ -49,7 +55,7 @@ public class WeatherService {
     final String units = "metric";
 
     URI uri = UriComponentsBuilder
-        .fromHttpUrl("https://pro.openweathermap.org/data/2.5/forecast/hourly")
+        .fromHttpUrl(weatherApiBaseUrl)
         .queryParam("lat", request.lat())
         .queryParam("lon", request.lon())
         .queryParam("units", units)
@@ -63,7 +69,7 @@ public class WeatherService {
 
   private AirPollutionApiResponse fetchAirPollutionApi(WeatherRequest request) {
     URI airUri = UriComponentsBuilder
-        .fromHttpUrl("http://api.openweathermap.org/data/2.5/air_pollution/forecast")
+        .fromHttpUrl(airPollutionApiBaseUrl)
         .queryParam("lat", request.lat())
         .queryParam("lon", request.lon())
         .queryParam("appid", apiKey)
@@ -92,7 +98,8 @@ public class WeatherService {
             convertUtcToKst(apiItem.dateTime()),
             apiItem.weatherMetrics().temperature(),
             apiItem.weatherMetrics().humidity(),
-            WeatherCondition.from(apiItem.weather().get(0).weatherCondition(), apiItem.sysInfo().partOfDay()),
+            WeatherCondition.from(apiItem.weather().get(0).weatherCondition(),
+                apiItem.sysInfo().partOfDay()),
             apiItem.precipitationProbability(),
             apiItem.wind().speed(),
             apiItem.wind().degree(),
