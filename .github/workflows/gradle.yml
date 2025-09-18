@@ -72,4 +72,4 @@ jobs:
           script_stop: true
           script: |
             sudo fuser -k 8080/tcp || true
-            sudo nohup java -jar build.jar ${{ secrets.BOOTRUN_ARGS }} > app.log 2>&1 &
+            sudo nohup java -jar build.jar "${{ secrets.BOOTRUN_ARGS }}" > app.log 2>&1 &
