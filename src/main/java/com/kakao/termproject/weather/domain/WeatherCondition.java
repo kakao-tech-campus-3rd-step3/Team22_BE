@@ -1,4 +1,4 @@
-package com.kakao.termproject.weather;
+package com.kakao.termproject.weather.domain;
 
 public enum WeatherCondition {
   CLEAR_DAY, CLOUDY_DAY, RAINY_DAY, SNOWY_DAY, WINDY_DAY,
