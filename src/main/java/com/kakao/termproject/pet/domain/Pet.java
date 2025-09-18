@@ -1,7 +1,10 @@
 package com.kakao.termproject.pet.domain;
 
+import com.kakao.termproject.pet.dto.PetUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +27,8 @@ public class Pet {
   private String name;
 
   @Column(nullable = false)
-  private String gender;
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
 
   @Column(nullable = false)
   private String breed;
@@ -50,7 +54,7 @@ public class Pet {
   @Builder
   public Pet(
       String name,
-      String gender,
+      Gender gender,
       String breed,
       String birthDate,
       boolean isNeutered,
@@ -71,43 +75,16 @@ public class Pet {
     this.chronicDisease = chronicDisease;
   }
 
-  public void changeName(String name) {
-    this.name = name;
-  }
-
-  public void changeGender(String gender) {
-    this.gender = gender;
-  }
-
-  public void changeBreed(String breed) {
-    this.breed = breed;
-  }
-
-  public void changeBirthDate(String birthDate) {
-    this.birthDate = birthDate;
-  }
-
-  public void changeIsNeutered(Boolean isNeutered) {
-    this.isNeutered = isNeutered;
-  }
-
-  public void changeIsVaccinated(Boolean isVaccinated) {
-    this.isVaccinated = isVaccinated;
-  }
-
-  public void changeWeight(BigDecimal weight) {
-    this.weight = weight;
-  }
-
-  public void changePreferredWeather(String preferredWeather) {
-    this.preferredWeather = preferredWeather;
-  }
-
-  public void changeChronicDisease(String chronicDisease) {
-    this.chronicDisease = chronicDisease;
-  }
-
-  public void changePreferredPath(String preferredPath) {
-    this.preferredPath = preferredPath;
+  public void updatePet(PetUpdateRequest request){
+    this.name = request.name();
+    this.gender = request.gender();
+    this.breed = request.breed();
+    this.birthDate = request.birthDate();
+    this.isNeutered = request.isNeutered();
+    this.isVaccinated = request.isVaccinated();
+    this.weight = request.weight();
+    this.preferredWeather = request.preferredWeather();
+    this.preferredPath = request.preferredPath();
+    this.chronicDisease = request.chronicDisease();
   }
 }
