@@ -78,4 +78,4 @@ jobs:
             export OPENWEATHER_API_KEY="${{ secrets.OPENWEATHER_API_KEY }}"
             export JWT_SECRET="${{ secrets.JWT_SECRET }}"
             export GCP_KEY="${{ secrets.GCP_KEY }}"
-            sudo nohup java -jar build.jar > app.log 2>&1 &
+            sudo -E nohup java -jar build.jar > app.log 2>&1 &
