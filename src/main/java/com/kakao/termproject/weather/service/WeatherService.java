@@ -75,11 +75,11 @@ public class WeatherService {
 
   private Map<Long, AirPollutionInfo> createPollutionInfoMap(
       AirPollutionApiResponse airApiResponse) {
-    return airApiResponse.list().stream()
+    return airApiResponse.airPollutionForecastItems().stream()
         .collect(Collectors.toMap(
-            AirPollutionApiResponse.AirPollutionForecastItem::dt,
+            AirPollutionApiResponse.AirPollutionForecastItem::timestamp,
             item -> new AirPollutionInfo(
-                item.main().aqi(),
+                item.airQualityInfo().aqi(),
                 item.components().getOrDefault("pm2_5", 0.0)
             )
         ));
@@ -87,17 +87,17 @@ public class WeatherService {
 
   private List<WeatherDetailInternal> createInternalForecasts(
       WeatherApiResponse weatherApiResponse, Map<Long, AirPollutionInfo> pollutionInfoMap) {
-    return weatherApiResponse.list().stream()
+    return weatherApiResponse.weatherApiForecastItems().stream()
         .map(apiItem -> new WeatherDetailInternal(
             convertUtcToKst(apiItem.dateTime()),
-            apiItem.main().temp(),
-            apiItem.main().humidity(),
-            WeatherCondition.from(apiItem.weather().get(0).main(), apiItem.sys().pod()),
+            apiItem.weatherMetrics().temperature(),
+            apiItem.weatherMetrics().humidity(),
+            WeatherCondition.from(apiItem.weather().get(0).weatherCondition(), apiItem.sysInfo().partOfDay()),
             apiItem.precipitationProbability(),
             apiItem.wind().speed(),
-            apiItem.wind().deg(),
-            pollutionInfoMap.get(apiItem.dt()).aqi(),
-            pollutionInfoMap.get(apiItem.dt()).pm2_5()
+            apiItem.wind().degree(),
+            pollutionInfoMap.get(apiItem.timestamp()).aqi(),
+            pollutionInfoMap.get(apiItem.timestamp()).pm2_5()
         )).collect(Collectors.toList());
   }
 
