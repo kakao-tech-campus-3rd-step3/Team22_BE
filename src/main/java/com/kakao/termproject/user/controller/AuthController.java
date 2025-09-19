@@ -4,7 +4,7 @@ import com.kakao.termproject.user.domain.User;
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
 import com.kakao.termproject.user.jwt.JwtUtil;
-import com.kakao.termproject.user.service.UserService;
+import com.kakao.termproject.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-  private final UserService userService;
+  private final AuthService authService;
   private final JwtUtil jwtUtil;
   private final AuthenticationManager authenticationManager;
 
@@ -31,7 +31,7 @@ public class AuthController {
       @RequestBody @Valid RegisterRequest request)
   {
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(userService.register(request));
+        .body(authService.register(request));
   }
 
   @PostMapping("/login")
