@@ -1,5 +1,6 @@
-package com.kakao.termproject.weather;
+package com.kakao.termproject.weather.service;
 
+import com.kakao.termproject.weather.domain.WeatherCondition;
 import com.kakao.termproject.weather.dto.AirPollutionApiResponse;
 import com.kakao.termproject.weather.dto.AirPollutionInfo;
 import com.kakao.termproject.weather.dto.WeatherApiResponse;
@@ -26,9 +27,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class WeatherService {
 
+  private final RestTemplate restTemplate;
+  private final WalkScoreCalculator walkScoreCalculator;
+
+  @Value("${openweathermap.api.base-url.weather}")
+  private String weatherApiBaseUrl;
+
+  @Value("${openweathermap.api.base-url.air-pollution}")
+  private String airPollutionApiBaseUrl;
+
   @Value("${openweathermap.api.key}")
   private String apiKey;
-  private final RestTemplate restTemplate;
 
   public WeatherResponse getWeatherDetail(WeatherRequest request) {
     WeatherApiResponse weatherApiResponse = fetchWeatherApi(request);
@@ -46,7 +55,7 @@ public class WeatherService {
     final String units = "metric";
 
     URI uri = UriComponentsBuilder
-        .fromHttpUrl("https://pro.openweathermap.org/data/2.5/forecast/hourly")
+        .fromHttpUrl(weatherApiBaseUrl)
         .queryParam("lat", request.lat())
         .queryParam("lon", request.lon())
         .queryParam("units", units)
@@ -60,7 +69,7 @@ public class WeatherService {
 
   private AirPollutionApiResponse fetchAirPollutionApi(WeatherRequest request) {
     URI airUri = UriComponentsBuilder
-        .fromHttpUrl("http://api.openweathermap.org/data/2.5/air_pollution/forecast")
+        .fromHttpUrl(airPollutionApiBaseUrl)
         .queryParam("lat", request.lat())
         .queryParam("lon", request.lon())
         .queryParam("appid", apiKey)
@@ -72,11 +81,11 @@ public class WeatherService {
 
   private Map<Long, AirPollutionInfo> createPollutionInfoMap(
       AirPollutionApiResponse airApiResponse) {
-    return airApiResponse.list().stream()
+    return airApiResponse.airPollutionForecastItems().stream()
         .collect(Collectors.toMap(
-            AirPollutionApiResponse.AirPollutionForecastItem::dt,
+            AirPollutionApiResponse.AirPollutionForecastItem::timestamp,
             item -> new AirPollutionInfo(
-                item.main().aqi(),
+                item.airQualityInfo().aqi(),
                 item.components().getOrDefault("pm2_5", 0.0)
             )
         ));
@@ -84,17 +93,18 @@ public class WeatherService {
 
   private List<WeatherDetailInternal> createInternalForecasts(
       WeatherApiResponse weatherApiResponse, Map<Long, AirPollutionInfo> pollutionInfoMap) {
-    return weatherApiResponse.list().stream()
+    return weatherApiResponse.weatherApiForecastItems().stream()
         .map(apiItem -> new WeatherDetailInternal(
             convertUtcToKst(apiItem.dateTime()),
-            apiItem.main().temp(),
-            apiItem.main().humidity(),
-            WeatherCondition.from(apiItem.weather().get(0).main(), apiItem.sys().pod()),
+            apiItem.weatherMetrics().temperature(),
+            apiItem.weatherMetrics().humidity(),
+            WeatherCondition.from(apiItem.weather().get(0).weatherCondition(),
+                apiItem.sysInfo().partOfDay()),
             apiItem.precipitationProbability(),
             apiItem.wind().speed(),
-            apiItem.wind().deg(),
-            pollutionInfoMap.get(apiItem.dt()).aqi(),
-            pollutionInfoMap.get(apiItem.dt()).pm2_5()
+            apiItem.wind().degree(),
+            pollutionInfoMap.get(apiItem.timestamp()).aqi(),
+            pollutionInfoMap.get(apiItem.timestamp()).pm2_5()
         )).collect(Collectors.toList());
   }
 
@@ -111,37 +121,8 @@ public class WeatherService {
                 item.windSpeed(),
                 item.windDegree()
             ),
-            calculateWalkScore(item)
+            walkScoreCalculator.calculateWalkScore(item)
         )).collect(Collectors.toList());
-  }
-
-  private int calculateWalkScore(WeatherDetailInternal detail) {
-    int score = 0;
-
-    //기온/습도
-    double temperature = detail.temperature();
-    if (temperature > 25) {
-      score -= (int) ((temperature - 25) * 5); // 25℃ 초과 시 1℃당 -5점
-    }
-
-    double humidity = detail.humidity();
-    if (humidity > 60) {
-      score -= (int) (((humidity - 60) / 5) * 3); // 60% 초과 시 5%당 -3점
-    }
-
-    //대기질
-    double pm2_5 = detail.pm2_5();
-    if (pm2_5 >= 76) {
-      score -= 40;
-    } else if (pm2_5 >= 36) {
-      score -= 20;
-    } else if (pm2_5 >= 16) {
-      score += 0;
-    } else if (pm2_5 >= 0) {
-      score += 10;
-    }
-
-    return score;
   }
 
   private LocalDateTime convertUtcToKst(String utcDateTimeStr) {

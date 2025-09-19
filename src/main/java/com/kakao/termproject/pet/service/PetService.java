@@ -41,17 +41,7 @@ public class PetService {
   @Transactional
   public void update(Long petId, PetUpdateRequest request) {
     Pet pet = get(petId);
-
-    if (request.name() != null) pet.changeName(request.name());
-    if (request.breed() != null) pet.changeBreed(request.breed());
-    if (request.gender() != null) pet.changeGender(request.gender());
-    if (request.birthDate() != null) pet.changeBirthDate(request.birthDate());
-    if (request.isNeutered() != null) pet.changeIsNeutered(request.isNeutered());
-    if (request.isVaccinated() != null) pet.changeIsVaccinated(request.isVaccinated());
-    if (request.weight() != null) pet.changeWeight(request.weight());
-    if (request.preferredWeather() != null) pet.changePreferredWeather(request.preferredWeather());
-    if (request.chronicDisease() != null) pet.changeChronicDisease(request.chronicDisease());
-    if (request.preferredPath() != null) pet.changePreferredPath(request.preferredPath());
+    pet.updatePet(request);
   }
   @Transactional
   public void delete(Long petId) {

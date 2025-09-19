@@ -1,6 +1,7 @@
 package com.kakao.termproject.user.jwt;
 
 import com.kakao.termproject.user.domain.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.time.Duration;
@@ -60,5 +61,14 @@ public class JwtUtil {
     } catch (Exception e) {
       return false;
     }
+  }
+
+  public String getEmail(String token){
+    Claims claims = Jwts.parser()
+        .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+        .build()
+        .parseSignedClaims(token)
+        .getPayload();
+    return claims.get("email", String.class);
   }
 }

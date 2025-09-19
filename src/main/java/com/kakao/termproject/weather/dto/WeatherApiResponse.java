@@ -4,43 +4,44 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public record WeatherApiResponse(
-    List<WeatherApiForecastItem> list
+    @JsonProperty("list")
+    List<WeatherApiForecastItem> weatherApiForecastItems
 ) {
 
   public record WeatherApiForecastItem(
-      @JsonProperty("dt") Long dt,
+      @JsonProperty("dt") Long timestamp,
       @JsonProperty("dt_txt") String dateTime,
-      Main main,
+      @JsonProperty("main") WeatherMetrics weatherMetrics,
       List<Weather> weather,
-      @JsonProperty("pop") double precipitationProbability,
+      @JsonProperty("pop") double precipitationProbability, //강수확률
       Wind wind,
-      Sys sys
+      @JsonProperty("sys") SysInfo sysInfo
   ) {
 
   }
 
-  public record Main(
-      double temp,
+  public record WeatherMetrics(
+      @JsonProperty("temp") double temperature,
       int humidity
   ) {
 
   }
 
   public record Weather(
-      String main
+      @JsonProperty("main") String weatherCondition
   ) {
 
   }
 
   public record Wind(
       double speed,
-      int deg
+      @JsonProperty("deg") int degree
   ) {
 
   }
 
-  public record Sys(
-      String pod //"d" 또는 "n". day or night
+  public record SysInfo(
+      String partOfDay //"d" 또는 "n". day or night
   ) {
 
   }

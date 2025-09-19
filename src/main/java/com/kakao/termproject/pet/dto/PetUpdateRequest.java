@@ -1,14 +1,15 @@
 package com.kakao.termproject.pet.dto;
 
+import com.kakao.termproject.pet.domain.Gender;
 import java.math.BigDecimal;
 
 public record PetUpdateRequest(
     String name,
     String breed,
-    String gender,
+    Gender gender,
     String birthDate,
-    Boolean isNeutered,
-    Boolean isVaccinated,
+    boolean isNeutered,
+    boolean isVaccinated,
     BigDecimal weight,
     String preferredWeather,
     String chronicDisease,
