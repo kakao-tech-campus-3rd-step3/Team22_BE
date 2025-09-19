@@ -14,15 +14,25 @@ import com.kakao.termproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
   private final UserRepository userRepository;
   private final PetService petService;
   private final JwtUtil jwtUtil;
+  private final PasswordEncoder passwordEncoder;
+  private final AuthenticationManager authenticationManager;
 
   public String register(RegisterRequest request) {
 
@@ -30,7 +40,7 @@ public class UserService {
       throw new EmailDuplicationException("중복된 이메일입니다");
     }
 
-    String encodedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+    String encodedPassword = passwordEncoder.encode(request.password());
 
     User user = new User(
         request.email(),
@@ -38,9 +48,16 @@ public class UserService {
         encodedPassword);
 
     userRepository.save(user);
+
+    Authentication auth = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(request.email(), request.password())
+    );
+    SecurityContextHolder.getContext().setAuthentication(auth);
+
     return jwtUtil.createAccessToken(user);
   }
 
+  @Deprecated
   public String login(LoginRequest request) {
     User storedUser = userRepository.findUserByEmail(request.email())
         .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
@@ -57,5 +74,11 @@ public class UserService {
         orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
 
     user.assignPet(pet);
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepository.findUserByEmail(username)
+        .orElseThrow(() -> new UsernameNotFoundException(username));
   }
 }
