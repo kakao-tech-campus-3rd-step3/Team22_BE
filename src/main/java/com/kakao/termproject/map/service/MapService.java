@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MapService {
 
   private final RestTemplate restTemplate;
@@ -25,6 +27,8 @@ public class MapService {
 
   @Value("${map.key}")
   private String key;
+  @Value("${map.url}")
+  private String url;
 
   public MapResponse getFitness(MapRequest request) {
     JsonNode response = getResponse(request.parameter());
@@ -36,7 +40,7 @@ public class MapService {
 
   private JsonNode getResponse(String parameter) {
     URI uri = UriComponentsBuilder
-      .fromUriString("https://maps.googleapis.com/maps/api/elevation/json")
+      .fromUriString(url)
       .queryParam("locations", parameter)
       .queryParam("key", key)
       .build()
@@ -93,7 +97,7 @@ public class MapService {
         continue;
       }
 
-      double currentSlope = elevations.get(i + 1) - elevations.get(i) / distances.get(i);
+      double currentSlope = (elevations.get(i + 1) - elevations.get(i)) / distances.get(i);
 
       currentSlope = Math.abs(currentSlope);
 

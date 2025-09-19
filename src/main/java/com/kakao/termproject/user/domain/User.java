@@ -12,7 +12,6 @@ import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,7 +31,6 @@ public class User {
   @Column(nullable = false)
   private String password;
 
-  @Setter
   @OneToOne
   @JoinColumn(name = "pet_id", unique = true)
   private Pet pet;
@@ -41,5 +39,9 @@ public class User {
     this.email = email;
     this.username = username;
     this.password = password;
+  }
+
+  public void assignPet(Pet pet){
+    this.pet = pet;
   }
 }
