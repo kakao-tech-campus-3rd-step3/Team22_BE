@@ -22,9 +22,9 @@ server:
   forward-headers-strategy: native
 
 jwt:
-  secret: ${JWT_SECRET}
-  accessTokenExpirationTime: 1800000 #30분
-  refreshTokenExpirationTime: 5184000000 #2달
+  secret: ${JWT_SECRET:defaultSecretKey1}
+  accessTokenExpirationTime: 30m #30분
+  refreshTokenExpirationTime: 60d #2달
 
 springdoc:
   api-docs:
