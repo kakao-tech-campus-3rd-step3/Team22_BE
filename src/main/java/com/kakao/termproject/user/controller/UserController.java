@@ -1,15 +1,14 @@
 package com.kakao.termproject.user.controller;
 
 import com.kakao.termproject.pet.dto.PetCreateRequest;
-import com.kakao.termproject.user.dto.LoginRequest;
-import com.kakao.termproject.user.dto.RegisterRequest;
+import com.kakao.termproject.user.domain.User;
 import com.kakao.termproject.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,28 +22,12 @@ public class UserController {
 
   private final UserService userService;
 
-  @PostMapping("/register")
-  public ResponseEntity<String> register(
-      @RequestBody @Valid RegisterRequest request)
-  {
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(userService.register(request));
-  }
-
-  @PostMapping("/login")
-  public ResponseEntity<String> login(
-      @RequestBody @Valid LoginRequest request
-  ){
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(userService.login(request));
-  }
-
   @PostMapping("/{userId}")
   public ResponseEntity<Void> setPet(
-      @PathVariable Long userId,
+      @AuthenticationPrincipal User user,
       @RequestBody @Valid PetCreateRequest request
   ){
-    userService.setPet(userId, request);
+    userService.setPet(user.getId(), request);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
