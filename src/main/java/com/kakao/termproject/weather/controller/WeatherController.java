@@ -1,8 +1,9 @@
-package com.kakao.termproject.weather;
+package com.kakao.termproject.weather.controller;
 
 
 import com.kakao.termproject.weather.dto.WeatherRequest;
 import com.kakao.termproject.weather.dto.WeatherResponse;
+import com.kakao.termproject.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
