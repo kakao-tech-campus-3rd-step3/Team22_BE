@@ -35,7 +35,8 @@ springdoc:
   swagger-ui:
     enabled: true
     urls:
-      - url: "https://spring-gift.store/v3/api-docs"
+      - name: "default"
+        url: "https://spring-gift.store/v3/api-docs"
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
