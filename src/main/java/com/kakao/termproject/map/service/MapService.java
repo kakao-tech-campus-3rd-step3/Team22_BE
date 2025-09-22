@@ -7,12 +7,12 @@ import com.kakao.termproject.exception.custom.JsonParseException;
 import com.kakao.termproject.map.dto.Coordinate;
 import com.kakao.termproject.map.dto.MapRequest;
 import com.kakao.termproject.map.dto.MapResponse;
+import com.kakao.termproject.map.properties.MapProperty;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -24,11 +24,7 @@ public class MapService {
 
   private final RestTemplate restTemplate;
   private final ObjectMapper objectMapper;
-
-  @Value("${map.key}")
-  private String key;
-  @Value("${map.url}")
-  private String url;
+  private final MapProperty mapProperty;
 
   public MapResponse getFitness(MapRequest request) {
     JsonNode response = getResponse(request.parameter());
@@ -40,9 +36,9 @@ public class MapService {
 
   private JsonNode getResponse(String parameter) {
     URI uri = UriComponentsBuilder
-      .fromUriString(url)
+      .fromUriString(mapProperty.url())
       .queryParam("locations", parameter)
-      .queryParam("key", key)
+      .queryParam("key", mapProperty.key())
       .build()
       .toUri();
 
