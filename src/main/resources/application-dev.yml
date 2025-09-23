@@ -1,61 +1,21 @@
 spring:
+  h2:
+    console:
+      enabled: true
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:mem:test;MODE=MYSQL;DB_CLOSE_DELAY=-1
   jpa:
     hibernate:
       ddl-auto: create
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.H2Dialect
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
 
-openweathermap:
-  api:
-    base-url:
-      weather: https://pro.openweathermap.org/data/2.5/forecast/hourly
-      air-pollution: http://api.openweathermap.org/data/2.5/air_pollution/forecast
-    key: ${OPENWEATHERMAP_API_KEY}
-  url: "https://pro.openweathermap.org/data/2.5/forecast/hourly"
-
-server:
-  forward-headers-strategy: native
-
-jwt:
-  secret: ${JWT_SECRET:defaultSecretKey1}
-  accessTokenExpirationTime: 30m #30분
-  refreshTokenExpirationTime: 60d #2달
-
 springdoc:
-  api-docs:
-    enabled: true
-    path: /v3/api-docs
-    groups.enabled: true
-
   swagger-ui:
-    enabled: true
     urls:
-      - name: "default"
-        url: "https://spring-gift.store/v3/api-docs"
-    path: /swagger-ui.html
-    operationsSorter: method
-    tagsSorter: alpha
-    display-request-duration: true
-    doc-expansion: none
-    persistAuthorization: true
-    defaultModelsExpandDepth: -1
-
-  paths-to-match:
-    - /api/**
-    - /admin/**
-  cache:
-    disabled: true
-  show-actuator: false
-
-map:
-  key: ${GCP_KEY}
-  url: https://maps.googleapis.com/maps/api/elevation/json
+      - name: "develop"
+        url: "http://localhost:8080/v3/api-docs"
