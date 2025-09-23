@@ -38,12 +38,8 @@ jobs:
 
       - name: Build with Gradle Wrapper
         env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          OPENWEATHERMAP_API_KEY: ${{ secrets.OPENWEATHERMAP_API_KEY }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          GCP_KEY: ${{ secrets.GCP_KEY }}
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: ./gradlew clean build
 
       - name: Rename jar file
