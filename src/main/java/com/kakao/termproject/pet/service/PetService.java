@@ -41,7 +41,18 @@ public class PetService {
   @Transactional
   public void update(Long petId, PetUpdateRequest request) {
     Pet pet = get(petId);
-    pet.updatePet(request);
+    pet.updatePet(
+        request.name(),
+        request.gender(),
+        request.breed(),
+        request.birthDate(),
+        request.isNeutered(),
+        request.isVaccinated(),
+        request.weight(),
+        request.preferredWeather(),
+        request.preferredPath(),
+        request.chronicDisease()
+    );
   }
   @Transactional
   public void delete(Long petId) {

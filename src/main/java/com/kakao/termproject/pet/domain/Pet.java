@@ -1,6 +1,5 @@
 package com.kakao.termproject.pet.domain;
 
-import com.kakao.termproject.pet.dto.PetUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -75,16 +74,29 @@ public class Pet {
     this.chronicDisease = chronicDisease;
   }
 
-  public void updatePet(PetUpdateRequest request){
-    this.name = request.name();
-    this.gender = request.gender();
-    this.breed = request.breed();
-    this.birthDate = request.birthDate();
-    this.isNeutered = request.isNeutered();
-    this.isVaccinated = request.isVaccinated();
-    this.weight = request.weight();
-    this.preferredWeather = request.preferredWeather();
-    this.preferredPath = request.preferredPath();
-    this.chronicDisease = request.chronicDisease();
+  // Pet.java
+  public void updatePet(
+      String name,
+      Gender gender,
+      String breed,
+      String birthDate,
+      boolean isNeutered,
+      boolean isVaccinated,
+      BigDecimal weight,
+      String preferredWeather,
+      String preferredPath,
+      String chronicDisease
+  ) {
+    this.name = name;
+    this.gender = gender;
+    this.breed = breed;
+    this.birthDate = birthDate;
+    this.isNeutered = isNeutered;
+    this.isVaccinated = isVaccinated;
+    this.weight = weight;
+    this.preferredWeather = preferredWeather;
+    this.preferredPath = preferredPath;
+    this.chronicDisease = chronicDisease;
   }
+
 }
