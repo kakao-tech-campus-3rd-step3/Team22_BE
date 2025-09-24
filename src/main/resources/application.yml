@@ -1,3 +1,48 @@
 spring:
   profiles:
     active: dev
+  cloud:
+    aws:
+      credentials:
+        access-key: ${ACCESS_KEY}
+        secret-key: ${SECRET_KEY}
+      region:
+        static: ap-northeast-2
+  config:
+    import: aws-parameterstore:/project/v1/
+
+jwt:
+  secret: ${jwt_secret}
+  accessTokenExpirationTime: 30m #30분
+  refreshTokenExpirationTime: 60d #2달
+
+openweathermap:
+  api:
+    base-url:
+      weather: https://pro.openweathermap.org/data/2.5/forecast/hourly
+      air-pollution: http://api.openweathermap.org/data/2.5/air_pollution/forecast
+    key: ${openweathermap_api_key}
+
+map:
+  key: ${gcp_key}
+  url: https://maps.googleapis.com/maps/api/elevation/json
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+    groups.enabled: true
+  swagger-ui:
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    display-request-duration: true
+    doc-expansion: none
+    persistAuthorization: true
+    defaultModelsExpandDepth: -1
+  paths-to-match:
+    - /api/**
+    - /admin/**
+  cache:
+    disabled: true
+  show-actuator: false

@@ -1,10 +1,10 @@
 package com.kakao.termproject.weather.dto;
 
-import com.kakao.termproject.weather.WeatherCondition;
+import com.kakao.termproject.weather.domain.WeatherCondition;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record WeatherResponse(List<HourlyForecast> items) {
+public record WeatherResponse(List<HourlyForecast> hourlyForecasts) {
 
   public record HourlyForecast(
       WeatherDetail weatherDetail,
