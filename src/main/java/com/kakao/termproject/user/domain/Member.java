@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User implements UserDetails {
+public class Member implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,7 +85,7 @@ public class User implements UserDetails {
     return true;
   }
 
-  public User(String email, String username, String password) {
+  public Member(String email, String username, String password) {
     this.email = email;
     this.username = username;
     this.password = password;

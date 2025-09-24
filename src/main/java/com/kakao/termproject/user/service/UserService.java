@@ -4,7 +4,7 @@ import com.kakao.termproject.exception.custom.UserNotFoundException;
 import com.kakao.termproject.pet.domain.Pet;
 import com.kakao.termproject.pet.dto.PetCreateRequest;
 import com.kakao.termproject.pet.service.PetService;
-import com.kakao.termproject.user.domain.User;
+import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +23,10 @@ public class UserService implements UserDetailsService {
   @Transactional
   public void setPet(Long userId, PetCreateRequest request){
     Pet pet = petService.create(request);
-    User user = userRepository.findById(userId).
+    Member member = userRepository.findById(userId).
         orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
 
-    user.assignPet(pet);
+    member.assignPet(pet);
   }
 
   @Override

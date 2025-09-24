@@ -1,6 +1,6 @@
 package com.kakao.termproject.user.controller;
 
-import com.kakao.termproject.user.domain.User;
+import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
 import com.kakao.termproject.user.jwt.JwtUtil;
@@ -42,9 +42,9 @@ public class AuthController {
         new UsernamePasswordAuthenticationToken(request.email(), request.password())
     );
 
-    User user = (User) authentication.getPrincipal();
+    Member member = (Member) authentication.getPrincipal();
 
-    String accessToken = jwtUtil.createAccessToken(user);
+    String accessToken = jwtUtil.createAccessToken(member);
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(accessToken);

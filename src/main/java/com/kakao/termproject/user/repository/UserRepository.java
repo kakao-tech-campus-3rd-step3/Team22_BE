@@ -1,11 +1,11 @@
 package com.kakao.termproject.user.repository;
 
-import com.kakao.termproject.user.domain.User;
+import com.kakao.termproject.user.domain.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Member, Long> {
 
-  Optional<User> findUserByEmail(String email);
+  Optional<Member> findUserByEmail(String email);
 
 }

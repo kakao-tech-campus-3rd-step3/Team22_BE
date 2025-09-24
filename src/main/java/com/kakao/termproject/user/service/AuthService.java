@@ -3,7 +3,7 @@ package com.kakao.termproject.user.service;
 import com.kakao.termproject.exception.custom.EmailDuplicationException;
 import com.kakao.termproject.exception.custom.InvalidPasswordException;
 import com.kakao.termproject.exception.custom.UserNotFoundException;
-import com.kakao.termproject.user.domain.User;
+import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
 import com.kakao.termproject.user.jwt.JwtUtil;
@@ -34,29 +34,29 @@ public class AuthService {
 
     String encodedPassword = passwordEncoder.encode(request.password());
 
-    User user = new User(
+    Member member = new Member(
         request.email(),
         request.username(),
         encodedPassword);
 
-    userRepository.save(user);
+    userRepository.save(member);
 
     Authentication auth = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.email(), request.password())
     );
     SecurityContextHolder.getContext().setAuthentication(auth);
 
-    return jwtUtil.createAccessToken(user);
+    return jwtUtil.createAccessToken(member);
   }
 
   @Deprecated
   public String login(LoginRequest request) {
-    User storedUser = userRepository.findUserByEmail(request.email())
+    Member storedMember = userRepository.findUserByEmail(request.email())
         .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
-    if(!BCrypt.checkpw(request.password(), storedUser.getPassword())){
+    if(!BCrypt.checkpw(request.password(), storedMember.getPassword())){
       throw new InvalidPasswordException("비밀번호가 다릅니다");
     }
-    return jwtUtil.createAccessToken(storedUser);
+    return jwtUtil.createAccessToken(storedMember);
   }
 
 }
