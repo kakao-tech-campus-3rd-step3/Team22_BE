@@ -7,30 +7,30 @@ import java.math.BigDecimal;
 
 public record PetCreateRequest(
 
-    @NotBlank
-    String name,
+  @NotBlank
+  String name,
 
-    @NotBlank
-    String breed,
+  @NotBlank
+  String breed,
 
-    @NotBlank
-    Gender gender,
+  @NotBlank
+  Gender gender,
 
-    @NotBlank
-    String birthDate,
+  @NotBlank
+  String birthDate,
 
-    @NotNull
-    boolean isNeutered,
+  @NotNull
+  boolean isNeutered,
 
-    @NotNull
-    boolean isVaccinated,
+  @NotNull
+  boolean isVaccinated,
 
-    @NotNull
-    BigDecimal weight,
+  @NotNull
+  BigDecimal weight,
 
-    String preferredWeather,
-    String chronicDisease,
-    String preferredPath
+  String preferredWeather,
+  String chronicDisease,
+  String preferredPath
 ) {
 
 }
