@@ -4,13 +4,14 @@ package com.kakao.termproject.user.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kakao.termproject.pet.domain.Pet;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import java.util.Collection;
 import java.util.Set;
@@ -48,16 +49,14 @@ public class Member implements UserDetails {
   @Column(name = "activated")
   private boolean activated;
 
-  @ManyToMany
-  @JoinTable(
-      name = "user_authority",
-      joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-      inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+  @Enumerated(EnumType.STRING)
+  @ElementCollection
   private Set<Authority> authorities;
+
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return authorities.stream()
-        .map(auth -> new SimpleGrantedAuthority(auth.getAuthorityName()))
+        .map(auth -> new SimpleGrantedAuthority(auth.name()))
         .toList();
   }
 
