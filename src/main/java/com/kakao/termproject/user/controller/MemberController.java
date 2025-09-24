@@ -2,7 +2,7 @@ package com.kakao.termproject.user.controller;
 
 import com.kakao.termproject.pet.dto.PetCreateRequest;
 import com.kakao.termproject.user.domain.Member;
-import com.kakao.termproject.user.service.UserService;
+import com.kakao.termproject.user.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/member")
 @RequiredArgsConstructor
 @Slf4j
-public class UserController {
+public class MemberController {
 
-  private final UserService userService;
+  private final MemberService memberService;
 
   @PostMapping("/{userId}")
   public ResponseEntity<Void> setPet(
       @AuthenticationPrincipal Member member,
       @RequestBody @Valid PetCreateRequest request
   ){
-    userService.setPet(member.getId(), request);
+    memberService.setPet(member.getId(), request);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

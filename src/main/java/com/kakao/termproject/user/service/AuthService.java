@@ -5,7 +5,7 @@ import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
 import com.kakao.termproject.user.jwt.JwtUtil;
-import com.kakao.termproject.user.repository.UserRepository;
+import com.kakao.termproject.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,14 +18,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-  private final UserRepository userRepository;
+  private final MemberRepository memberRepository;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
   private final JwtUtil jwtUtil;
 
   public String register(RegisterRequest request) {
 
-    if(userRepository.findUserByEmail(request.email()).isPresent()){
+    if(memberRepository.findUserByEmail(request.email()).isPresent()){
       throw new EmailDuplicationException("중복된 이메일입니다");
     }
 
@@ -36,7 +36,7 @@ public class AuthService {
         request.username(),
         encodedPassword);
 
-    userRepository.save(member);
+    memberRepository.save(member);
 
     Authentication auth = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.email(), request.password())
