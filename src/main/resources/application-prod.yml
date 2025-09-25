@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: ${db_url}
+    username: ${db_username}
+    password: ${db_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        default_batch_fetch_size: 100
+    defer-datasource-initialization: true
+
+server:
+  forward-headers-strategy: native
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: "prod"
+        url: "https://spring-gift.store/v3/api-docs"

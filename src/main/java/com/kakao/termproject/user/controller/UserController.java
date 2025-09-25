@@ -1,7 +1,7 @@
 package com.kakao.termproject.user.controller;
 
 import com.kakao.termproject.pet.dto.PetCreateRequest;
-import com.kakao.termproject.user.domain.User;
+import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +24,10 @@ public class UserController {
 
   @PostMapping("/{userId}")
   public ResponseEntity<Void> setPet(
-      @AuthenticationPrincipal User user,
+      @AuthenticationPrincipal Member member,
       @RequestBody @Valid PetCreateRequest request
   ){
-    userService.setPet(user.getId(), request);
+    userService.setPet(member.getId(), request);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
