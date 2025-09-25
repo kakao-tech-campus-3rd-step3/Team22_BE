@@ -11,7 +11,7 @@ public class WalkScoreCalculator {
   private static final double LOW_TEMP_THRESHOLD = 4.0;
   private static final int TEMP_PENALTY_RATE = 5;
 
-  private static final double HIGH_HUMIDITY_THRESHOLD = 60.0;
+  private static final int HIGH_HUMIDITY_THRESHOLD = 60;
   private static final int HUMIDITY_PENALTY_DIVISOR = 5;
   private static final int HUMIDITY_PENALTY_RATE = 3;
 
