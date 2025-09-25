@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kakao.termproject.exception.custom.JsonParseException;
 import com.kakao.termproject.map.dto.Coordinate;
-import com.kakao.termproject.map.dto.MapRequest;
 import com.kakao.termproject.map.dto.MapResponse;
 import com.kakao.termproject.map.properties.MapProperties;
 import java.net.URI;
@@ -26,10 +25,12 @@ public class MapService {
   private final ObjectMapper objectMapper;
   private final MapProperties mapProperties;
 
-  public MapResponse getFitness(MapRequest request) {
-    JsonNode response = getResponse(request.parameter());
+  public MapResponse getFitness(Coordinate[] coordinates) {
+    StringBuilder parameter = new StringBuilder();
+    List<Double> distances = getDistancesAndBuildParameter(coordinates, parameter);
+
+    JsonNode response = getResponse(parameter.toString());
     List<Double> elevations = getElevations(response);
-    List<Double> distances = getDistances(response);
 
     return calcAvgAndMaxSlope(elevations, distances);
   }
@@ -62,23 +63,22 @@ public class MapService {
     return elevations;
   }
 
-  private List<Double> getDistances(JsonNode data) {
-    List<Coordinate> coordinates = new ArrayList<>();
+  private List<Double> getDistancesAndBuildParameter(Coordinate[] coordinates,
+    StringBuilder parameter) {
     List<Double> distances = new ArrayList<>();
 
-    for (JsonNode coordinate : data) {
-      coordinate = coordinate.get("location");
-      coordinates.add(
-        new Coordinate(
-          coordinate.get("lat").asDouble(),
-          coordinate.get("lng").asDouble()
-        )
-      );
+    for (int i = 0; i < coordinates.length - 1; i++) {
+      distances.add(haversineDistance(coordinates[i], coordinates[i + 1]));
+
+      parameter.append(coordinates[i].lat())
+        .append(",")
+        .append(coordinates[i].lng())
+        .append("|");
     }
 
-    for (int i = 0; i < coordinates.size() - 1; i++) {
-      distances.add(haversineDistance(coordinates.get(i), coordinates.get(i + 1)));
-    }
+    parameter.append(coordinates[coordinates.length - 1].lat())
+      .append(",")
+      .append(coordinates[coordinates.length - 1].lng());
 
     return distances;
   }
@@ -119,14 +119,14 @@ public class MapService {
   private Double haversineDistance(Coordinate location1, Coordinate location2) {
     final int RADIUS = 6371000; // earth radius meter
 
-    double latDistance = Math.toRadians(location2.latitude() - location1.latitude());
-    double lonDistance = Math.toRadians(location2.longitude() - location1.longitude());
+    double latDistance = Math.toRadians(location2.lat() - location1.lat());
+    double lonDistance = Math.toRadians(location2.lng() - location1.lng());
 
     double sinLatHalfSquared = Math.sin(latDistance / 2) * Math.sin(latDistance / 2);
     double sinLonHalfSquared = Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
 
-    double location1Radians = Math.toRadians(location1.latitude());
-    double location2Radians = Math.toRadians(location2.latitude());
+    double location1Radians = Math.toRadians(location1.lat());
+    double location2Radians = Math.toRadians(location2.lat());
 
     double a = sinLatHalfSquared + Math.cos(location1Radians)
       * Math.cos(location2Radians) * sinLonHalfSquared;
