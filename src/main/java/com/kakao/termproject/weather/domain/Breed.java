@@ -19,7 +19,7 @@ public enum Breed {
   BEAGLE("Beagle", SnoutType.NON_BRACHYCEPHALIC, CoatType.SHORT_HAIRED, SizeType.SMALL),
 
   //목록에 없는 견종을 위한 기본값
-  UNKNOWN("Unknown", SnoutType.NON_BRACHYCEPHALIC, CoatType.SHORT_HAIRED, SizeType.SMALL);
+  UNKNOWN("Unknown", SnoutType.UNKNOWN, CoatType.UNKNOWN, SizeType.UNKNOWN);
 
   private final String breedName;
   private final SnoutType snoutType;
