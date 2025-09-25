@@ -36,10 +36,10 @@ public class Pet {
   private String birthDate;
 
   @Column(nullable = false)
-  private boolean isNeutered;
+  private boolean neutralize;
 
   @Column(nullable = false)
-  private boolean isVaccinated;
+  private boolean vaccinated;
 
   private String preferredWeather;
 
@@ -56,8 +56,8 @@ public class Pet {
       Gender gender,
       String breed,
       String birthDate,
-      boolean isNeutered,
-      boolean isVaccinated,
+      boolean neutralize,
+      boolean vaccinated,
       BigDecimal weight,
       String preferredWeather,
       String preferredPath,
@@ -66,22 +66,21 @@ public class Pet {
     this.gender = gender;
     this.breed = breed;
     this.birthDate = birthDate;
-    this.isNeutered = isNeutered;
-    this.isVaccinated = isVaccinated;
+    this.neutralize = neutralize;
+    this.vaccinated = vaccinated;
     this.weight = weight;
     this.preferredWeather = preferredWeather;
     this.preferredPath = preferredPath;
     this.chronicDisease = chronicDisease;
   }
 
-  // Pet.java
   public void updatePet(
       String name,
       Gender gender,
       String breed,
       String birthDate,
-      boolean isNeutered,
-      boolean isVaccinated,
+      boolean neutralize,
+      boolean vaccinated,
       BigDecimal weight,
       String preferredWeather,
       String preferredPath,
@@ -91,8 +90,8 @@ public class Pet {
     this.gender = gender;
     this.breed = breed;
     this.birthDate = birthDate;
-    this.isNeutered = isNeutered;
-    this.isVaccinated = isVaccinated;
+    this.neutralize = neutralize;
+    this.vaccinated = vaccinated;
     this.weight = weight;
     this.preferredWeather = preferredWeather;
     this.preferredPath = preferredPath;

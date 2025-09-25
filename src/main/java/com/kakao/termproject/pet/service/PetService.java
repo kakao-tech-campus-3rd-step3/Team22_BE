@@ -22,8 +22,8 @@ public class PetService {
         breed(request.breed()).
         gender(request.gender()).
         birthDate(request.birthDate()).
-        isNeutered(request.isNeutered()).
-        isVaccinated(request.isVaccinated()).
+        neutralize(request.neutralize()).
+        vaccinated(request.vaccinated()).
         weight(request.weight()).
         preferredWeather(request.preferredWeather()).
         preferredPath(request.preferredPath()).
@@ -46,8 +46,8 @@ public class PetService {
         request.gender(),
         request.breed(),
         request.birthDate(),
-        request.isNeutered(),
-        request.isVaccinated(),
+        request.neutralize(),
+        request.vaccinated(),
         request.weight(),
         request.preferredWeather(),
         request.preferredPath(),
