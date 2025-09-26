@@ -7,7 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,8 +46,8 @@ public class Pet {
 
   private String preferredPath;
 
-  @Column(precision = 5, scale = 2, nullable = false)
-  private BigDecimal weight;
+  @Column(nullable = false)
+  private float weight;
 
   @Builder
   public Pet(
@@ -58,7 +57,7 @@ public class Pet {
       String birthDate,
       boolean neutralize,
       boolean vaccinated,
-      BigDecimal weight,
+      float weight,
       String preferredWeather,
       String preferredPath,
       String chronicDisease){
@@ -81,7 +80,7 @@ public class Pet {
       String birthDate,
       boolean neutralize,
       boolean vaccinated,
-      BigDecimal weight,
+      float weight,
       String preferredWeather,
       String preferredPath,
       String chronicDisease

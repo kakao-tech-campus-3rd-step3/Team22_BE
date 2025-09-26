@@ -4,7 +4,6 @@ import com.kakao.termproject.pet.domain.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 public record PetCreateRequest(
 
@@ -16,7 +15,7 @@ public record PetCreateRequest(
   @Schema(description = "종", example = "Maltese")
   String breed,
 
-  @NotBlank
+  @NotNull
   @Schema(description = "성별", example = "MALE")
   Gender gender,
 
@@ -34,7 +33,7 @@ public record PetCreateRequest(
 
   @NotNull
   @Schema(description = "몸무게", example = "4")
-  BigDecimal weight,
+  float weight,
 
   @Schema(description = "선호 날씨", example = "sun")
   String preferredWeather,
