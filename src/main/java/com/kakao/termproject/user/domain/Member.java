@@ -4,7 +4,6 @@ package com.kakao.termproject.user.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kakao.termproject.pet.domain.Pet;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Collections;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,14 +49,11 @@ public class Member implements UserDetails {
   private boolean activated;
 
   @Enumerated(EnumType.STRING)
-  @ElementCollection
-  private Set<Authority> authorities;
+  private Authority authority = Authority.ROLE_USER;
 
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorities.stream()
-        .map(auth -> new SimpleGrantedAuthority(auth.name()))
-        .toList();
+    return Collections.singleton(new SimpleGrantedAuthority(authority.name()));
   }
 
   public String getUsername() {
