@@ -10,6 +10,7 @@ import com.kakao.termproject.pet.domain.Gender;
 import com.kakao.termproject.pet.dto.PetCreateRequest;
 import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.service.MemberService;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ class MemberControllerTest {
         "2020-02-02",
         false,
         true,
-        10,
+        BigDecimal.valueOf(10),
         "sun",
         "heart",
         "asphalt"
