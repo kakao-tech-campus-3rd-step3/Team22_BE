@@ -47,7 +47,7 @@ public class Pet {
 
   private String preferredPath;
 
-  @Column(precision = 5, scale = 2, nullable = false)
+  @Column(nullable = false)
   private BigDecimal weight;
 
   @Builder

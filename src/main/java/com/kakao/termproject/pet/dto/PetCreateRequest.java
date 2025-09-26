@@ -16,7 +16,7 @@ public record PetCreateRequest(
   @Schema(description = "종", example = "Maltese")
   String breed,
 
-  @NotBlank
+  @NotNull
   @Schema(description = "성별", example = "MALE")
   Gender gender,
 
