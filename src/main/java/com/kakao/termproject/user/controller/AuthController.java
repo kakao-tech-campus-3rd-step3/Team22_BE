@@ -1,6 +1,5 @@
 package com.kakao.termproject.user.controller;
 
-import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
 import com.kakao.termproject.user.jwt.JwtUtil;
@@ -10,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,16 +35,8 @@ public class AuthController {
   public ResponseEntity<String> login(
       @RequestBody @Valid LoginRequest request
   ){
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(request.email(), request.password())
-    );
-
-    Member member = (Member) authentication.getPrincipal();
-
-    String accessToken = jwtUtil.createAccessToken(member);
-
     return ResponseEntity.status(HttpStatus.OK)
-        .body(accessToken);
+        .body(authService.login(request));
   }
 
 }
