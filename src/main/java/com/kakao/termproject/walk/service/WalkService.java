@@ -33,11 +33,7 @@ public class WalkService {
 
       WalkData walkData = objectMapper.readValue(walk.getWalk(), WalkData.class);
 
-      long monthDiff = ChronoUnit.WEEKS.between(walk.getUpdateDateTime(), LocalDateTime.now());
-
-      if (Math.abs(monthDiff) >= 2) { // 2주 간격으로 경사도 업데이트
-        updateSlopes(walk, walkData);
-      }
+      updateSlopes(walk, walkData);
 
       return new WalkResponse(
         walk.getId(),
