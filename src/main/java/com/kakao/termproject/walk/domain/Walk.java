@@ -1,7 +1,10 @@
 package com.kakao.termproject.walk.domain;
 
 import com.kakao.termproject.user.domain.Member;
+import com.kakao.termproject.walk.domain.converter.WalkDataConverter;
+import com.kakao.termproject.walk.dto.WalkData;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,7 +27,8 @@ public class Walk {
   private Long id;
 
   @Column(columnDefinition = "TEXT")
-  private String walk;
+  @Convert(converter = WalkDataConverter.class)
+  private WalkData walk;
 
   private Double maxSlope;
 
@@ -36,7 +40,7 @@ public class Walk {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  public Walk(String walk, Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime) {
+  public Walk(WalkData walk, Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime) {
     this.walk = walk;
     this.maxSlope = maxSlope;
     this.avgOfSlope = avgOfSlope;
