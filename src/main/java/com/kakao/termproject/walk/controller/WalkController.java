@@ -34,9 +34,7 @@ public class WalkController {
 
   @Operation(summary = "저장", description = "현재 로그인되어있는 유저의 주 산책경로를 저장합니다.")
   @PostMapping
-  public ResponseEntity<Long> saveWalk(
-//    @AuthenticationPrincipal Member member,
-    @RequestBody WalkData data) {
+  public ResponseEntity<Long> saveWalk(@RequestBody WalkData data) {
     log.info("Walk save Request");
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(walkService.saveWalk(data));

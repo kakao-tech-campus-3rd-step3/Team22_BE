@@ -1,9 +1,9 @@
 package com.kakao.termproject.walk.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kakao.termproject.exception.custom.DataNotFoundException;
 import com.kakao.termproject.map.dto.MapResponse;
 import com.kakao.termproject.map.service.MapService;
+import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.walk.domain.Walk;
 import com.kakao.termproject.walk.dto.WalkData;
 import com.kakao.termproject.walk.dto.WalkResponse;
@@ -19,8 +19,6 @@ public class WalkService {
 
   private final WalkRepository walkRepository;
   private final MapService mapService;
-
-  private static final ObjectMapper objectMapper = new ObjectMapper();
 
   @Transactional(readOnly = true)
   public WalkResponse getWalkById(Long walkId) {
