@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "산책 경로 저장 및 조회")
 @RestController
-@RequestMapping("/api/walk")
+@RequestMapping("/api/walks")
 @RequiredArgsConstructor
 @Slf4j
 public class WalkController {
