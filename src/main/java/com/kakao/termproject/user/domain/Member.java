@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kakao.termproject.pet.domain.Pet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Collections;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User implements UserDetails {
+public class Member implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,17 +48,12 @@ public class User implements UserDetails {
   @Column(name = "activated")
   private boolean activated;
 
-  @ManyToMany
-  @JoinTable(
-      name = "user_authority",
-      joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-      inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-  private Set<Authority> authorities;
+  @Enumerated(EnumType.STRING)
+  private Authority authority = Authority.ROLE_USER;
+
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorities.stream()
-        .map(auth -> new SimpleGrantedAuthority(auth.getAuthorityName()))
-        .toList();
+    return Collections.singleton(new SimpleGrantedAuthority(authority.name()));
   }
 
   public String getUsername() {
@@ -85,7 +80,7 @@ public class User implements UserDetails {
     return true;
   }
 
-  public User(String email, String username, String password) {
+  public Member(String email, String username, String password) {
     this.email = email;
     this.username = username;
     this.password = password;

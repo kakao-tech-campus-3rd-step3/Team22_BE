@@ -4,8 +4,8 @@ import com.kakao.termproject.exception.custom.UserNotFoundException;
 import com.kakao.termproject.pet.domain.Pet;
 import com.kakao.termproject.pet.dto.PetCreateRequest;
 import com.kakao.termproject.pet.service.PetService;
-import com.kakao.termproject.user.domain.User;
-import com.kakao.termproject.user.repository.UserRepository;
+import com.kakao.termproject.user.domain.Member;
+import com.kakao.termproject.user.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,23 +15,23 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class UserService implements UserDetailsService {
+public class MemberService implements UserDetailsService {
 
-  private final UserRepository userRepository;
+  private final MemberRepository memberRepository;
   private final PetService petService;
 
   @Transactional
   public void setPet(Long userId, PetCreateRequest request){
     Pet pet = petService.create(request);
-    User user = userRepository.findById(userId).
+    Member member = memberRepository.findById(userId).
         orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다"));
 
-    user.assignPet(pet);
+    member.assignPet(pet);
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return userRepository.findUserByEmail(username)
+  public UserDetails loadUserByUsername(String username){
+    return memberRepository.findUserByEmail(username)
         .orElseThrow(() -> new UsernameNotFoundException(username));
   }
 }

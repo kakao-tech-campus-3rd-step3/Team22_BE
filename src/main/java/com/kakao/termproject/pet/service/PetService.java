@@ -22,8 +22,8 @@ public class PetService {
         breed(request.breed()).
         gender(request.gender()).
         birthDate(request.birthDate()).
-        isNeutered(request.isNeutered()).
-        isVaccinated(request.isVaccinated()).
+        neutralize(request.neutralize()).
+        vaccinated(request.vaccinated()).
         weight(request.weight()).
         preferredWeather(request.preferredWeather()).
         preferredPath(request.preferredPath()).
@@ -41,7 +41,18 @@ public class PetService {
   @Transactional
   public void update(Long petId, PetUpdateRequest request) {
     Pet pet = get(petId);
-    pet.updatePet(request);
+    pet.updatePet(
+        request.name(),
+        request.gender(),
+        request.breed(),
+        request.birthDate(),
+        request.neutralize(),
+        request.vaccinated(),
+        request.weight(),
+        request.preferredWeather(),
+        request.preferredPath(),
+        request.chronicDisease()
+    );
   }
   @Transactional
   public void delete(Long petId) {

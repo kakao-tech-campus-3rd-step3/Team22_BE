@@ -1,6 +1,6 @@
 package com.kakao.termproject.user.jwt;
 
-import com.kakao.termproject.user.domain.User;
+import com.kakao.termproject.user.domain.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -25,26 +25,26 @@ public class JwtUtil {
   private Duration refreshTokenExpirationTime;
 
 
-  public String createAccessToken(User user) {
+  public String createAccessToken(Member member) {
     return Jwts.builder()
       .header()
       .add("typ", "JWT")
       .and()
-      .claim("email", user.getEmail())
-      .claim("username", user.getUsername())
+      .claim("email", member.getEmail())
+      .claim("username", member.getUsername())
       .issuedAt(new Date(System.currentTimeMillis()))
       .expiration(Date.from(Instant.now().plus(accessTokenExpirationTime)))
       .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
       .compact();
   }
 
-  public String createRefreshToken(User user) {
+  public String createRefreshToken(Member member) {
     return Jwts.builder()
       .header()
       .add("typ", "JWT")
       .and()
-      .claim("email", user.getEmail())
-      .claim("username", user.getUsername())
+      .claim("email", member.getEmail())
+      .claim("username", member.getUsername())
       .issuedAt(new Date(System.currentTimeMillis()))
       .expiration(Date.from(Instant.now().plus(refreshTokenExpirationTime)))
       .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))

@@ -1,8 +1,10 @@
 package com.kakao.termproject.user.controller;
 
 import com.kakao.termproject.pet.dto.PetCreateRequest;
-import com.kakao.termproject.user.domain.User;
-import com.kakao.termproject.user.service.UserService;
+import com.kakao.termproject.user.domain.Member;
+import com.kakao.termproject.user.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,20 +16,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "사용자 기능")
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 @Slf4j
-public class UserController {
+public class MemberController {
 
-  private final UserService userService;
+  private final MemberService memberService;
 
-  @PostMapping("/{userId}")
+  @Operation(summary = "저장", description = "현재 로그인 된 유저의 반려견을 설정합니다")
+  @PostMapping("/pet")
   public ResponseEntity<Void> setPet(
-      @AuthenticationPrincipal User user,
+      @AuthenticationPrincipal Member member,
       @RequestBody @Valid PetCreateRequest request
   ){
-    userService.setPet(user.getId(), request);
+    memberService.setPet(member.getId(), request);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }

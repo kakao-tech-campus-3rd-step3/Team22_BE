@@ -6,9 +6,6 @@ import com.kakao.termproject.weather.dto.AirPollutionInfo;
 import com.kakao.termproject.weather.dto.WeatherApiResponse;
 import com.kakao.termproject.weather.dto.WeatherDetailInternal;
 import com.kakao.termproject.weather.dto.WeatherRequest;
-import com.kakao.termproject.weather.dto.WeatherResponse;
-import com.kakao.termproject.weather.dto.WeatherResponse.HourlyForecast;
-import com.kakao.termproject.weather.dto.WeatherResponse.HourlyForecast.WeatherDetail;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -39,16 +36,12 @@ public class WeatherService {
   @Value("${openweathermap.api.key}")
   private String apiKey;
 
-  public WeatherResponse getWeatherDetail(WeatherRequest request) {
+  public List<WeatherDetailInternal> getInternalForecasts(WeatherRequest request) {
     WeatherApiResponse weatherApiResponse = fetchWeatherApi(request);
     AirPollutionApiResponse airApiResponse = fetchAirPollutionApi(request);
 
     Map<Long, AirPollutionInfo> pollutionInfoMap = createPollutionInfoMap(airApiResponse);
-    List<WeatherDetailInternal> internalForecasts = createInternalForecasts(weatherApiResponse,
-        pollutionInfoMap);
-    List<HourlyForecast> items = createHourlyForecasts(internalForecasts);
-
-    return new WeatherResponse(items);
+    return createInternalForecasts(weatherApiResponse, pollutionInfoMap);
   }
 
   private WeatherApiResponse fetchWeatherApi(WeatherRequest request) {
@@ -105,23 +98,6 @@ public class WeatherService {
             apiItem.wind().degree(),
             pollutionInfoMap.get(apiItem.timestamp()).aqi(),
             pollutionInfoMap.get(apiItem.timestamp()).pm2_5()
-        )).collect(Collectors.toList());
-  }
-
-  private List<HourlyForecast> createHourlyForecasts(
-      List<WeatherDetailInternal> internalForecasts) {
-    return internalForecasts.stream()
-        .map(item -> new HourlyForecast(
-            new WeatherDetail(
-                item.dateTime(),
-                item.weather(),
-                item.temperature(),
-                item.humidity(),
-                item.precipitationProbability(),
-                item.windSpeed(),
-                item.windDegree()
-            ),
-            walkScoreCalculator.calculateWalkScore(item)
         )).collect(Collectors.toList());
   }
 

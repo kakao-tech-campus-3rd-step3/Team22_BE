@@ -1,37 +1,20 @@
 package com.kakao.termproject.walk.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kakao.termproject.map.dto.Coordinate;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-public record WalkData(@JsonProperty("routes") Routes routes) {
+public record WalkData(
+  @Schema(example = "2010.39")
+  @JsonProperty("totalDistance_m")
+  Double totalDistance,
 
-  public record Routes(@JsonProperty("sections") Sections sections) {
+  @Schema(example = "1800")
+  @JsonProperty("walkingTime_sec")
+  Integer walkingTime,
 
-    public record Sections(
-      @JsonProperty("departure") Departure departure,
-      @JsonProperty("arrival") Arrival arrival,
-      @JsonProperty("distance") Integer distance,
-      @JsonProperty("duration") Integer duration
-    ) {
+  @JsonProperty("path")
+  Coordinate[] coordinates
+) {
 
-      public record Departure(
-        @JsonProperty("lng") double lng,
-        @JsonProperty("lat") double lat
-      ) {
-
-      }
-
-      public record Arrival(
-        @JsonProperty("lng") double lng,
-        @JsonProperty("lat") double lat
-      ) {
-
-      }
-    }
-  }
-
-  @JsonCreator
-  public WalkData(@JsonProperty("routes") Routes routes) {
-    this.routes = routes;
-  }
 }
