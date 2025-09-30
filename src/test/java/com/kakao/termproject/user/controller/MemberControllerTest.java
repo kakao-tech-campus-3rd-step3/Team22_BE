@@ -12,7 +12,6 @@ import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.dto.MemberNameRequest;
 import com.kakao.termproject.user.service.MemberService;
 import java.math.BigDecimal;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

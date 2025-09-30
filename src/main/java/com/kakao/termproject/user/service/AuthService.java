@@ -36,14 +36,14 @@ public class AuthService {
         request.username(),
         encodedPassword);
 
-    memberRepository.save(member);
+    Member savedMember = memberRepository.save(member);
 
     Authentication auth = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.email(), request.password())
     );
     SecurityContextHolder.getContext().setAuthentication(auth);
 
-    return jwtUtil.createAccessToken(member);
+    return jwtUtil.createAccessToken(savedMember);
   }
 
 

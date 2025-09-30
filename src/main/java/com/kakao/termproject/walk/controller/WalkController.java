@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "산책 경로 저장 및 조회")
 @RestController
-@RequestMapping("/api/walk")
+@RequestMapping("/api/walks")
 @RequiredArgsConstructor
 @Slf4j
 public class WalkController {
@@ -34,9 +34,7 @@ public class WalkController {
 
   @Operation(summary = "저장", description = "현재 로그인되어있는 유저의 주 산책경로를 저장합니다.")
   @PostMapping
-  public ResponseEntity<Long> saveWalk(
-//    @AuthenticationPrincipal Member member,
-    @RequestBody WalkData data) {
+  public ResponseEntity<Long> saveWalk(@RequestBody WalkData data) {
     log.info("Walk save Request");
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(walkService.saveWalk(data));
