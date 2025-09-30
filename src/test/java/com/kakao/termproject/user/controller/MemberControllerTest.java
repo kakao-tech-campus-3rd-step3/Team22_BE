@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import com.kakao.termproject.pet.domain.Gender;
 import com.kakao.termproject.pet.dto.PetCreateRequest;
 import com.kakao.termproject.user.domain.Member;
+import com.kakao.termproject.user.dto.MemberNameRequest;
 import com.kakao.termproject.user.service.MemberService;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,16 +31,17 @@ class MemberControllerTest {
   @Mock
   private MemberService memberService;
 
+  Member mockMember;
+
   @BeforeEach
   void setUp() {
-
+     mockMember = mock(Member.class);
   }
 
   @Test
   @DisplayName("반려견 등록 성공")
   void 반려견_등록_성공(){
 
-    Member mockMember = mock(Member.class);
     when(mockMember.getId()).thenReturn(1L);
 
 
@@ -61,9 +63,22 @@ class MemberControllerTest {
     verify(memberService).setPet(1L, petCreateRequest);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-
-
   }
 
+  @Test
+  @DisplayName("사용자 이름 변경")
+  void 사용자_이름_변경_성공(){
+    when(mockMember.getId()).thenReturn(1L);
+
+    MemberNameRequest memberNameRequest = new MemberNameRequest(
+        "test"
+    );
+
+    ResponseEntity<Void> response = memberController.setUsername(mockMember, memberNameRequest);
+
+    verify(memberService).setName(1L, memberNameRequest);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+  }
 
 }
