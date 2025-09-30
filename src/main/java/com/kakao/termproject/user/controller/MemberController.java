@@ -2,6 +2,8 @@ package com.kakao.termproject.user.controller;
 
 import com.kakao.termproject.pet.dto.PetCreateRequest;
 import com.kakao.termproject.user.domain.Member;
+import com.kakao.termproject.user.dto.MemberNameRequest;
+import com.kakao.termproject.user.dto.MemberStatusResponse;
 import com.kakao.termproject.user.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,5 +37,23 @@ public class MemberController {
   ){
     memberService.setPet(member.getId(), request);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+  @Operation(summary = "username 변경", description = "현재 로그인 된 유저의 username을 변경합니다")
+  @PatchMapping()
+  public ResponseEntity<Void> setUsername(
+      @AuthenticationPrincipal Member member,
+      @RequestBody @Valid MemberNameRequest request
+  ){
+    memberService.setName(member.getId(), request);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  @Operation(summary = "사용자 정보 조회", description = "현재 로그인 된 유저의 정보를 조회합니다")
+  @GetMapping()
+  public ResponseEntity<MemberStatusResponse> getStatus(
+      @AuthenticationPrincipal Member member
+  ){
+    return ResponseEntity.ok().
+        body(memberService.getStatus(member.getId()));
   }
 }

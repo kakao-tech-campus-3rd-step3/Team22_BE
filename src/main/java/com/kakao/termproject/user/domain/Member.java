@@ -56,8 +56,8 @@ public class Member implements UserDetails {
     return Collections.singleton(new SimpleGrantedAuthority(authority.name()));
   }
 
-  public String getUsername() {
-    return this.email;
+  public void changeUsername(String username) {
+     this.username = username;
   }
 
   @Override
