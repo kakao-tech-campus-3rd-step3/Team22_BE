@@ -1,4 +1,4 @@
-package com.kakao.termproject.weather.domain;
+package com.kakao.termproject.user.domain;
 
 public enum SnoutType {
   BRACHYCEPHALIC, // 단두종

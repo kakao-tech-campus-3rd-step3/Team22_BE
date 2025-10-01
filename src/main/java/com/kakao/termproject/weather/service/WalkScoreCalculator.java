@@ -2,9 +2,9 @@ package com.kakao.termproject.weather.service;
 
 import com.kakao.termproject.pet.domain.Pet;
 import com.kakao.termproject.weather.domain.AirQualityGrade;
-import com.kakao.termproject.weather.domain.Breed;
-import com.kakao.termproject.weather.domain.CoatType;
-import com.kakao.termproject.weather.domain.SnoutType;
+import com.kakao.termproject.user.domain.Breed;
+import com.kakao.termproject.user.domain.CoatType;
+import com.kakao.termproject.user.domain.SnoutType;
 import com.kakao.termproject.weather.dto.WeatherDetailInternal;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.kakao.termproject.weather.domain;
+package com.kakao.termproject.user.domain;
 
 public enum CoatType {
   LONG_HAIRED, //장모종
