@@ -47,7 +47,7 @@ public class WalkServiceTest {
 
     assertThat(response.walkResponse().id()).isNotNull();
 
-    WalkResponse walkResponse = walkService.getWalkById(mockMember);
+    WalkResponse walkResponse = walkService.getWalk(mockMember);
 
     assertThat(walkResponse).isNotNull();
     assertThat(walkResponse.maxSlope()).isGreaterThan(-0.0);
