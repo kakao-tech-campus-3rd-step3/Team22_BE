@@ -21,8 +21,8 @@ public class WalkService {
   private final MapService mapService;
 
   @Transactional(readOnly = true)
-  public WalkResponse getWalkById(Long walkId) {
-    Walk walk = walkRepository.findById(walkId)
+  public WalkResponse getWalkById(Member member) {
+    Walk walk = walkRepository.findByMember(member)
       .orElseThrow(() -> new DataNotFoundException("해당되는 id의 산책 경로가 존재하지 않습니다."));
 
     updateSlopes(walk);
@@ -49,7 +49,7 @@ public class WalkService {
   }
 
   @Transactional
-  public Long saveWalk(WalkData walkData) {
+  public Long saveWalk(Member member, WalkData walkData) {
     MapResponse mapResponse = mapService.getFitness(walkData.coordinates());
 
     Walk walk = walkRepository.save(
@@ -57,7 +57,8 @@ public class WalkService {
         walkData,
         mapResponse.maxSlope(),
         mapResponse.avgOfSlope(),
-        LocalDateTime.now()
+        LocalDateTime.now(),
+        member
       )
     );
 

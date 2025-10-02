@@ -1,5 +1,6 @@
 package com.kakao.termproject.walk.controller;
 
+import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.walk.dto.WalkData;
 import com.kakao.termproject.walk.dto.WalkResponse;
 import com.kakao.termproject.walk.service.WalkService;
@@ -9,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,17 +27,21 @@ public class WalkController {
   private final WalkService walkService;
 
   @Operation(summary = "조회", description = "현재 로그인되어있는 유저의 주 산책경로를 반환합니다.")
-  @GetMapping("/{walkId}")
-  public ResponseEntity<WalkResponse> getWalk(@PathVariable Long walkId) {
-    log.info("get Walk data for walkId: {}", walkId);
-    return ResponseEntity.ok(walkService.getWalkById(walkId));
+  @GetMapping
+  public ResponseEntity<WalkResponse> getWalk(
+    @AuthenticationPrincipal Member member
+  ) {
+    log.info("get Walk data for member: {}", member);
+    return ResponseEntity.ok(walkService.getWalkById(member));
   }
 
   @Operation(summary = "저장", description = "현재 로그인되어있는 유저의 주 산책경로를 저장합니다.")
   @PostMapping
-  public ResponseEntity<Long> saveWalk(@RequestBody WalkData data) {
+  public ResponseEntity<Long> saveWalk(
+    @AuthenticationPrincipal Member member,
+    @RequestBody WalkData data) {
     log.info("Walk save Request");
     return ResponseEntity.status(HttpStatus.CREATED)
-      .body(walkService.saveWalk(data));
+      .body(walkService.saveWalk(member, data));
   }
 }
