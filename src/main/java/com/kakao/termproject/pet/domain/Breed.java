@@ -1,4 +1,4 @@
-package com.kakao.termproject.user.domain;
+package com.kakao.termproject.pet.domain;
 
 import java.util.Arrays;
 import lombok.Getter;
