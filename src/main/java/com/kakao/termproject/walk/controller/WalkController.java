@@ -46,7 +46,7 @@ public class WalkController {
     @AuthenticationPrincipal Member member
   ) {
     log.info("get Walk data for member: {}", member);
-    return ResponseEntity.ok(walkService.getWalkById(member));
+    return ResponseEntity.ok(walkService.getWalk(member));
   }
 
   @ApiResponse(responseCode = "201", description = "사용자의 주 경로가 없는 경우 새로 저장")

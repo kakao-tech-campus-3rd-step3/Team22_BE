@@ -23,7 +23,7 @@ public class WalkService {
   private final MapService mapService;
 
   @Transactional
-  public WalkResponse getWalkById(Member member) {
+  public WalkResponse getWalk(Member member) {
     Walk walk = walkRepository.findByMember(member)
       .orElseThrow(() -> new DataNotFoundException("해당되는 id의 산책 경로가 존재하지 않습니다."));
 
