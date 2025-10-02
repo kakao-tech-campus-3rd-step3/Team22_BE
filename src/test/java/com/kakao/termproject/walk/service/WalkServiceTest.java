@@ -3,20 +3,26 @@ package com.kakao.termproject.walk.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.kakao.termproject.map.dto.Coordinate;
+import com.kakao.termproject.user.domain.Member;
+import com.kakao.termproject.user.repository.MemberRepository;
 import com.kakao.termproject.walk.dto.WalkData;
 import com.kakao.termproject.walk.dto.WalkResponse;
+import com.kakao.termproject.walk.dto.WalkSaveResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 
 @SpringBootTest
 public class WalkServiceTest {
 
   @Autowired
   private WalkService walkService;
+  @Autowired
+  private MemberRepository memberRepository;
+
   private WalkData mockData;
+  private Member mockMember;
 
   @BeforeEach
   void setUp() {
@@ -25,15 +31,23 @@ public class WalkServiceTest {
       1800,
       createCoordinates()
     );
+
+    mockMember = new Member(
+      "test1234@test.com",
+      "test1234",
+      "1234"
+    );
+
+    memberRepository.save(mockMember);
   }
 
   @Test
   void 경로_저장_및_경사도_반환_테스트() {
-    Long id = walkService.saveWalk(mockData);
+    WalkSaveResponse response = walkService.saveWalk(mockMember, mockData);
 
-    assertThat(id).isNotNull();
+    assertThat(response.walkResponse().id()).isNotNull();
 
-    WalkResponse walkResponse = walkService.getWalkById(id);
+    WalkResponse walkResponse = walkService.getWalkById(mockMember);
 
     assertThat(walkResponse).isNotNull();
     assertThat(walkResponse.maxSlope()).isGreaterThan(-0.0);

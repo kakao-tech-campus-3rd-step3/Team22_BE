@@ -49,6 +49,14 @@ public class Walk {
     this.member = member;
   }
 
+  public void updateWalk(WalkData walk, Double maxSlope, Double avgOfSlope,
+    LocalDateTime updateDateTime) {
+    this.walk = walk;
+    this.maxSlope = maxSlope;
+    this.avgOfSlope = avgOfSlope;
+    this.updateDateTime = updateDateTime;
+  }
+
   public void updateSlopes(Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime) {
     long monthDiff = ChronoUnit.WEEKS.between(this.updateDateTime, LocalDateTime.now());
 
