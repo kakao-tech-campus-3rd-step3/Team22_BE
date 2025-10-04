@@ -51,7 +51,7 @@ class AuthControllerTest {
 
   @Test
   @DisplayName("회원가입 실패 : 이메일 형식 아님")
-  void 잘못된_이메일_회원가입_400반환() throws Exception {
+  void 잘못된_이메일_회원가입_400반환() {
     RegisterRequest registerRequest = new RegisterRequest("testgmail.com", "testuser", "testpwd1234");
 
     var url = "http://localhost:" + port + "/api/register";
