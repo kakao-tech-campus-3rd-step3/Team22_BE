@@ -51,6 +51,9 @@ public class Member implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Authority authority = Authority.ROLE_USER;
 
+  @Column(name = "refresh_token")
+  private String refreshToken;
+
 
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.singleton(new SimpleGrantedAuthority(authority.name()));
@@ -58,6 +61,14 @@ public class Member implements UserDetails {
 
   public void changeUsername(String username) {
      this.username = username;
+  }
+
+  public void updateRefreshToken(String refreshToken) {
+    this.refreshToken = refreshToken;
+  }
+
+  public void clearRefreshToken() {
+    this.refreshToken = null;
   }
 
   @Override

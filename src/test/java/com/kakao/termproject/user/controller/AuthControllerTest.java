@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
+import com.kakao.termproject.user.dto.TokenResponse;
 import com.kakao.termproject.user.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -71,7 +72,7 @@ class AuthControllerTest {
   void 정상_로그인_200반환() {
     LoginRequest loginRequest = new LoginRequest("test1@gmail.com", "testpwd1234");
 
-    ResponseEntity<String> response = authController.login(loginRequest);
+    ResponseEntity<TokenResponse> response = authController.login(loginRequest);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
   }
