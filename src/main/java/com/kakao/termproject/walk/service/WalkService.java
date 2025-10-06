@@ -23,15 +23,15 @@ public class WalkService {
   @Transactional(readOnly = true)
   public WalkResponse getWalkById(Long walkId) {
     Walk walk = walkRepository.findById(walkId)
-      .orElseThrow(() -> new DataNotFoundException("해당되는 id의 산책 경로가 존재하지 않습니다."));
+        .orElseThrow(() -> new DataNotFoundException("해당되는 id의 산책 경로가 존재하지 않습니다."));
 
     updateSlopes(walk);
 
     return new WalkResponse(
-      walk.getId(),
-      walk.getMaxSlope(),
-      walk.getAvgOfSlope(),
-      walk.getWalk()
+        walk.getId(),
+        walk.getMaxSlope(),
+        walk.getAvgOfSlope(),
+        walk.getWalk()
     );
   }
 
@@ -40,9 +40,9 @@ public class WalkService {
     MapResponse mapResponse = mapService.getFitness(walk.getWalk().coordinates());
 
     walk.updateSlopes(
-      mapResponse.maxSlope(),
-      mapResponse.avgOfSlope(),
-      LocalDateTime.now()
+        mapResponse.maxSlope(),
+        mapResponse.avgOfSlope(),
+        LocalDateTime.now()
     );
 
     walkRepository.save(walk);
@@ -53,14 +53,19 @@ public class WalkService {
     MapResponse mapResponse = mapService.getFitness(walkData.coordinates());
 
     Walk walk = walkRepository.save(
-      new Walk(
-        walkData,
-        mapResponse.maxSlope(),
-        mapResponse.avgOfSlope(),
-        LocalDateTime.now()
-      )
+        new Walk(
+            walkData,
+            mapResponse.maxSlope(),
+            mapResponse.avgOfSlope(),
+            LocalDateTime.now()
+        )
     );
 
     return walk.getId();
+  }
+
+  public Walk get(Long walkId) {
+    return walkRepository.findById(walkId)
+        .orElseThrow(() -> new DataNotFoundException("해당되는 id의 산책 경로가 존재하지 않습니다."));
   }
 }

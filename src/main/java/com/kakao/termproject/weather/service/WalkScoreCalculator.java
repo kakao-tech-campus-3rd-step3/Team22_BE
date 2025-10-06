@@ -1,6 +1,8 @@
 package com.kakao.termproject.weather.service;
 
 import com.kakao.termproject.pet.domain.Pet;
+import com.kakao.termproject.walk.domain.Walk;
+import com.kakao.termproject.walk.dto.WalkData;
 import com.kakao.termproject.weather.domain.AirQualityGrade;
 import com.kakao.termproject.pet.domain.Breed;
 import com.kakao.termproject.pet.domain.CoatType;
@@ -27,9 +29,13 @@ public class WalkScoreCalculator {
   private static final double BRACHY_HOT_HOUR_WEIGHT = 0.2;   // ID 3-2
   private static final double NON_BRACHY_HOT_HOUR_WEIGHT = 0.8; // ID 3-5
 
+  // 경로 점수 계산에 필요한 상수들을 명확하게 정의합니다.
+  final int BASE_SCORE = 20; // 평균 경사도 5% 미만일 때의 기본 점수
+  final double SLOPE_THRESHOLD = 5.0; // 점수 차감이 시작되는 경사도 기준 (5%)
+  final int SLOPE_PENALTY_RATE = 2; // 경사도가 1% 증가할 때마다 차감될 점수
 
-  public int calculateWalkScore(WeatherDetailInternal detail, Pet pet) {
-    int baseRouteScore = 0; // TODO 산책 경로에 대한 점수. 추후 추가 예정.
+  public int calculateWalkScore(WeatherDetailInternal detail, Pet pet, Walk walk) {
+    int baseRouteScore = calculateBaseRouteScore(walk);
     int environmentalScore = calculateEnvironmentalScore(detail);
     double personalizationWeight = getPersonalizationWeight(detail, pet);
 
@@ -37,6 +43,20 @@ public class WalkScoreCalculator {
     double calculatedScore = (baseRouteScore + environmentalScore) * personalizationWeight;
 
     return (int) Math.round(calculatedScore);
+  }
+
+  private int calculateBaseRouteScore(Walk walk) {
+    int score = 20; //기본 점수
+
+    Double avgOfSlope = walk.getAvgOfSlope();
+    double absAvgSlope = Math.abs(avgOfSlope);
+
+    //평균 경사도 5% 미만: 20점,이후 1% 증가 시 -2점
+    if (absAvgSlope > SLOPE_THRESHOLD) {
+      score -= ((int) (absAvgSlope - SLOPE_THRESHOLD)) * SLOPE_PENALTY_RATE;
+    }
+
+    return score;
   }
 
   private int calculateEnvironmentalScore(WeatherDetailInternal detail) {
