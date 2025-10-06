@@ -4,6 +4,7 @@ import com.kakao.termproject.pet.domain.Pet;
 import com.kakao.termproject.pet.service.PetService;
 import com.kakao.termproject.walk.domain.Walk;
 import com.kakao.termproject.walk.service.WalkService;
+import com.kakao.termproject.walkscore.WalkScoreCalculator;
 import com.kakao.termproject.weather.dto.WeatherDetailInternal;
 import com.kakao.termproject.weather.dto.WeatherResponse;
 import com.kakao.termproject.weather.dto.WeatherResponse.HourlyForecast;

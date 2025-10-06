@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.kakao.termproject.pet.domain.Gender;
 import com.kakao.termproject.pet.domain.Pet;
+import com.kakao.termproject.walkscore.WalkScoreCalculator;
 import com.kakao.termproject.weather.domain.WeatherCondition;
 import com.kakao.termproject.weather.dto.WeatherDetailInternal;
 import java.math.BigDecimal;

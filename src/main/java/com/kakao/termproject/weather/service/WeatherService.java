@@ -25,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class WeatherService {
 
   private final RestTemplate restTemplate;
-  private final WalkScoreCalculator walkScoreCalculator;
 
   @Value("${openweathermap.api.base-url.weather}")
   private String weatherApiBaseUrl;
