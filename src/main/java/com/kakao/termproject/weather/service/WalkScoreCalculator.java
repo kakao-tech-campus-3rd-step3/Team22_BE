@@ -29,8 +29,7 @@ public class WalkScoreCalculator {
   private static final double BRACHY_HOT_HOUR_WEIGHT = 0.2;   // ID 3-2
   private static final double NON_BRACHY_HOT_HOUR_WEIGHT = 0.8; // ID 3-5
 
-  // 경로 점수 계산에 필요한 상수들을 명확하게 정의합니다.
-  final int BASE_SCORE = 20; // 평균 경사도 5% 미만일 때의 기본 점수
+  // 경로 점수 계산에 필요한 상수들
   final double SLOPE_THRESHOLD = 5.0; // 점수 차감이 시작되는 경사도 기준 (5%)
   final int SLOPE_PENALTY_RATE = 2; // 경사도가 1% 증가할 때마다 차감될 점수
 
