@@ -36,9 +36,9 @@ public class PersonalizationWeightPolicy implements WeightPolicy {
   private static final int SMALL_DOG_MEDIUM_DISTANCE_THRESHOLD_M = 1500; // 1.5km
   private static final double SMALL_DOG_LONG_DISTANCE_MULTIPLIER = 0.2;     // ID 3-12
   private static final double SMALL_DOG_MEDIUM_DISTANCE_MULTIPLIER = 1.5;   // ID 3-13
-  private static final int SMALL_DOG_UNDERWEIGHT_THRESHOLD_KG = 5;               // 5kg
+  private static final BigDecimal SMALL_DOG_UNDERWEIGHT_THRESHOLD_KG = BigDecimal.valueOf(5); // 5kg
   private static final double SMALL_DOG_UNDERWEIGHT_VERY_LONG_DISTANCE_MULTIPLIER = 0.2; // ID 3-20
-  private static final int LARGE_DOG_OBESE_THRESHOLD_KG = 20;                    // 20kg
+  private static final BigDecimal LARGE_DOG_OBESE_THRESHOLD_KG = BigDecimal.valueOf(20); // 20kg
   private static final double LARGE_DOG_OBESE_VERY_LONG_DISTANCE_MULTIPLIER = 0.7;     // ID 3-19
 
   // 지병(Chronic Disease) 관련 상수
@@ -136,7 +136,7 @@ public class PersonalizationWeightPolicy implements WeightPolicy {
         }
         // ID 3-20 5kg 미만 소형견, 산책경로 5km 초과
         boolean isUnderweight =
-            petWeight.compareTo(BigDecimal.valueOf(SMALL_DOG_UNDERWEIGHT_THRESHOLD_KG)) < 0;
+            petWeight.compareTo(SMALL_DOG_UNDERWEIGHT_THRESHOLD_KG) < 0;
         if (isUnderweight && walkData.totalDistance() > VERY_LONG_DISTANCE_THRESHOLD_M) {
           weight *= SMALL_DOG_UNDERWEIGHT_VERY_LONG_DISTANCE_MULTIPLIER;
         }
@@ -144,7 +144,7 @@ public class PersonalizationWeightPolicy implements WeightPolicy {
       //대형견
       case LARGE -> {
         // ID 3-19 20kg 이상 대형견, 산책경로 5km 초과
-        boolean isObese = petWeight.compareTo(BigDecimal.valueOf(LARGE_DOG_OBESE_THRESHOLD_KG)) > 0;
+        boolean isObese = petWeight.compareTo(LARGE_DOG_OBESE_THRESHOLD_KG) > 0;
         if (isObese && walkData.totalDistance() > VERY_LONG_DISTANCE_THRESHOLD_M) {
           weight *= LARGE_DOG_OBESE_VERY_LONG_DISTANCE_MULTIPLIER;
         }
