@@ -15,14 +15,10 @@ public enum AirQualityGrade {
   private final int penalty;
 
   public static AirQualityGrade of(double pm2_5Value) {
-    if (pm2_5Value >= VERY_BAD.threshold) {
-      return VERY_BAD;
-    }
-    if (pm2_5Value >= BAD.threshold) {
-      return BAD;
-    }
-    if (pm2_5Value >= MODERATE.threshold) {
-      return MODERATE;
+    for (AirQualityGrade grade : AirQualityGrade.values()) {
+      if (pm2_5Value >= grade.threshold) {
+        return grade;
+      }
     }
     return GOOD;
   }
