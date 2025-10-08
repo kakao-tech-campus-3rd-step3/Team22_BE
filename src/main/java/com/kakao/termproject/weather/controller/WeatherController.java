@@ -4,7 +4,7 @@ package com.kakao.termproject.weather.controller;
 import com.kakao.termproject.weather.dto.WeatherDetailInternal;
 import com.kakao.termproject.weather.dto.WeatherRequest;
 import com.kakao.termproject.weather.dto.WeatherResponse;
-import com.kakao.termproject.weather.service.WalkScoreService;
+import com.kakao.termproject.walkscore.service.WalkScoreService;
 import com.kakao.termproject.weather.service.WeatherService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;

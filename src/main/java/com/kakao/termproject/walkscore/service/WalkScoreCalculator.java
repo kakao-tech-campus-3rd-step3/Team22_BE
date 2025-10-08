@@ -1,4 +1,4 @@
-package com.kakao.termproject.walkscore;
+package com.kakao.termproject.walkscore.service;
 
 import com.kakao.termproject.pet.domain.Pet;
 import com.kakao.termproject.walk.domain.Walk;

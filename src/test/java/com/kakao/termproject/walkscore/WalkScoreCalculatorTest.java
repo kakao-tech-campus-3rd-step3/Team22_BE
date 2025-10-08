@@ -8,6 +8,7 @@ import com.kakao.termproject.walkscore.dto.WalkScoreContext;
 import com.kakao.termproject.walkscore.policy.EnvironmentalScorePolicy;
 import com.kakao.termproject.walkscore.policy.PersonalizationWeightPolicy;
 import com.kakao.termproject.walkscore.policy.RouteScorePolicy;
+import com.kakao.termproject.walkscore.service.WalkScoreCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
