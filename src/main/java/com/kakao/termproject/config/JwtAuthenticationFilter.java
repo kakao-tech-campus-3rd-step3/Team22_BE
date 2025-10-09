@@ -21,27 +21,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtUtil jwtUtil;
   private final UserDetailsService userDetailsService;
-  private final String BEARER_PREFIX = "Bearer";
+  private final String BEARER_PREFIX = "Bearer ";
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      FilterChain filterChain) throws ServletException, IOException {
+    HttpServletRequest request,
+    HttpServletResponse response,
+    FilterChain filterChain) throws ServletException, IOException {
 
     String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if(authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
+    if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
       String token = authHeader.substring(BEARER_PREFIX.length());
 
-      if(jwtUtil.verifyToken(token)){
+      if (jwtUtil.verifyToken(token)) {
         String email = jwtUtil.getEmail(token);
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.getAuthorities());
+          new UsernamePasswordAuthenticationToken(
+            userDetails,
+            null,
+            userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
     }

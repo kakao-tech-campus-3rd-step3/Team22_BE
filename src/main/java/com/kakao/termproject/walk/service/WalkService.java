@@ -7,9 +7,11 @@ import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.walk.domain.Walk;
 import com.kakao.termproject.walk.dto.WalkData;
 import com.kakao.termproject.walk.dto.WalkResponse;
+import com.kakao.termproject.walk.dto.WalkSaveResponse;
 import com.kakao.termproject.walk.repository.WalkRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +37,7 @@ public class WalkService {
     );
   }
 
-  @Transactional
-  public void updateSlopes(Walk walk) {
+  private void updateSlopes(Walk walk) {
     MapResponse mapResponse = mapService.getFitness(walk.getWalk().coordinates());
 
     walk.updateSlopes(
@@ -44,14 +45,30 @@ public class WalkService {
         mapResponse.avgOfSlope(),
         LocalDateTime.now()
     );
-
-    walkRepository.save(walk);
   }
 
   @Transactional
-  public Long saveWalk(WalkData walkData) {
+  public WalkSaveResponse saveWalk(Member member, WalkData walkData) {
     MapResponse mapResponse = mapService.getFitness(walkData.coordinates());
 
+    return walkRepository.findByMember(member)
+      .map(walk -> new WalkSaveResponse(HttpStatus.OK, updateWalk(walk, walkData, mapResponse)))
+      .orElseGet(
+        () -> new WalkSaveResponse(HttpStatus.CREATED, createWalk(walkData, mapResponse, member)));
+  }
+
+  private WalkResponse updateWalk(Walk walk, WalkData walkData, MapResponse mapResponse) {
+    walk.updateWalk(
+      walkData,
+      mapResponse.maxSlope(),
+      mapResponse.avgOfSlope(),
+      LocalDateTime.now()
+    );
+
+    return convertToDTO(walk);
+  }
+
+  private WalkResponse createWalk(WalkData walkData, MapResponse mapResponse, Member member) {
     Walk walk = walkRepository.save(
         new Walk(
             walkData,
@@ -61,7 +78,17 @@ public class WalkService {
         )
     );
 
-    return walk.getId();
+    return convertToDTO(walk);
+  }
+
+  private WalkResponse convertToDTO(Walk walk) {
+    return new WalkResponse(
+      walk.getId(),
+      walk.getMaxSlope(),
+      walk.getAvgOfSlope(),
+      walk.getUpdateDateTime(),
+      walk.getWalk()
+    );
   }
 
   public Walk get(Long walkId) {
