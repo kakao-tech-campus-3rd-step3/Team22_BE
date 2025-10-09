@@ -63,12 +63,12 @@ public class JwtUtil {
     }
   }
 
-  public String getEmail(String token){
+  public String getEmail(String token) {
     Claims claims = Jwts.parser()
-        .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
-        .build()
-        .parseSignedClaims(token)
-        .getPayload();
+      .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+      .build()
+      .parseSignedClaims(token)
+      .getPayload();
     return claims.get("email", String.class);
   }
 }
