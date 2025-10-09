@@ -6,6 +6,7 @@ import com.kakao.termproject.weather.dto.AirPollutionInfo;
 import com.kakao.termproject.weather.dto.WeatherApiResponse;
 import com.kakao.termproject.weather.dto.WeatherDetailInternal;
 import com.kakao.termproject.weather.dto.WeatherRequest;
+import com.kakao.termproject.weather.properties.OpenWeatherMapProperties;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -25,16 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class WeatherService {
 
   private final RestTemplate restTemplate;
-  private final WalkScoreCalculator walkScoreCalculator;
-
-  @Value("${openweathermap.api.base-url.weather}")
-  private String weatherApiBaseUrl;
-
-  @Value("${openweathermap.api.base-url.air-pollution}")
-  private String airPollutionApiBaseUrl;
-
-  @Value("${openweathermap.api.key}")
-  private String apiKey;
+  private final OpenWeatherMapProperties openWeatherMapProperties;
 
   public List<WeatherDetailInternal> getInternalForecasts(WeatherRequest request) {
     WeatherApiResponse weatherApiResponse = fetchWeatherApi(request);
@@ -48,11 +40,11 @@ public class WeatherService {
     final String units = "metric";
 
     URI uri = UriComponentsBuilder
-        .fromHttpUrl(weatherApiBaseUrl)
+        .fromHttpUrl(openWeatherMapProperties.baseUrl().weather())
         .queryParam("lat", request.lat())
         .queryParam("lon", request.lon())
         .queryParam("units", units)
-        .queryParam("appid", apiKey)
+        .queryParam("appid", openWeatherMapProperties.key())
         .queryParam("cnt", request.cnt())
         .build()
         .toUri();
@@ -62,10 +54,10 @@ public class WeatherService {
 
   private AirPollutionApiResponse fetchAirPollutionApi(WeatherRequest request) {
     URI airUri = UriComponentsBuilder
-        .fromHttpUrl(airPollutionApiBaseUrl)
+        .fromHttpUrl(openWeatherMapProperties.baseUrl().airPollution())
         .queryParam("lat", request.lat())
         .queryParam("lon", request.lon())
-        .queryParam("appid", apiKey)
+        .queryParam("appid", openWeatherMapProperties.key())
         .build()
         .toUri();
 
