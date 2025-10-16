@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(value = PetNotFoundException.class)
-  public ResponseEntity<ErrorResult> PetNotFoundException(PetNotFoundException e) {
+  public ResponseEntity<ErrorResult> petNotFoundException(PetNotFoundException e) {
     return ResponseEntity
       .status(HttpStatus.NOT_FOUND)
       .body(new ErrorResult(
@@ -93,7 +93,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(value = InvalidTokenException.class)
-  public ResponseEntity<ErrorResult> InvalidTokenException(InvalidTokenException e) {
+  public ResponseEntity<ErrorResult> invalidTokenException(InvalidTokenException e) {
     return ResponseEntity
       .status(HttpStatus.UNAUTHORIZED)
       .body(new ErrorResult(
