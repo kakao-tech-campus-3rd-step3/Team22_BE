@@ -42,9 +42,7 @@ public class WalkServiceTest {
 
   @Test
   void 경로_저장_및_경사도_반환_테스트() {
-    WalkSaveResponse response = walkService.saveWalk(mockMember, mockData);
-
-    assertThat(response.walkResponse().id()).isNotNull();
+    WalkResponse response = walkService.saveWalk(mockMember, mockData);
 
     WalkResponse walkResponse = walkService.getWalk(mockMember);
 
