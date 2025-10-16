@@ -58,9 +58,9 @@ public class Walk {
   public void updateSlopes(Double maxSlope, Double avgOfSlope) {
     LocalDateTime now = LocalDateTime.now();
 
-    long monthDiff = ChronoUnit.WEEKS.between(this.updateDateTime, now);
+    long weeksDiff = ChronoUnit.WEEKS.between(this.updateDateTime, now);
 
-    if (Math.abs(monthDiff) >= 2) { // 2주 간격으로 경사도 업데이트
+    if (Math.abs(weeksDiff) >= 2) { // 2주 간격으로 경사도 업데이트
       this.maxSlope = maxSlope;
       this.avgOfSlope = avgOfSlope;
       this.updateDateTime = now;
