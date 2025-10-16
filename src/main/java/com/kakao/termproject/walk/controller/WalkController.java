@@ -41,7 +41,7 @@ public class WalkController {
           examples = @ExampleObject(
             value = "{\n"
               + "    \"status\": \"NOT_FOUND\",\n"
-              + "    \"message\": \"해당되는 id의 산책 경로가 존재하지 않습니다.\"\n"
+              + "    \"message\": \"해당하는 사용자의 주 산책 경로가 존재하지 않습니다.\"\n"
               + "}"
           )))
     }
@@ -55,7 +55,19 @@ public class WalkController {
     return ResponseEntity.ok(walkService.getWalk(member));
   }
 
-  @ApiResponse(responseCode = "201", description = "사용자의 주 경로를 저장")
+  @ApiResponses(
+    value = {
+      @ApiResponse(responseCode = "201", description = "사용자의 주 경로를 저장"),
+      @ApiResponse(responseCode = "409", description = "사용자의 주 경로가 이미 존재하는 경우",
+        content = @Content(schema = @Schema(implementation = ErrorResult.class),
+          examples = @ExampleObject(
+            value = "{\n"
+              + "    \"status\": \"CONFLICT\",\n"
+              + "    \"message\": \"해당하는 사용자의 주 산책 경로가 이미 존재합니다.\"\n"
+              + "}"
+          )))
+    }
+  )
   @Operation(summary = "저장", description = "현재 로그인되어있는 유저의 주 산책경로를 저장합니다. Authorization 헤더를 추가하여 인증 인가 과정을 거칩니다.")
   @PostMapping
   public ResponseEntity<WalkResponse> saveWalk(
@@ -66,7 +78,19 @@ public class WalkController {
       .body(walkService.saveWalk(member, data));
   }
 
-  @ApiResponse(responseCode = "200", description = "사용자의 주 경로를 업데이트")
+  @ApiResponses(
+    value = {
+      @ApiResponse(responseCode = "200", description = "사용자의 주 경로를 업데이트"),
+      @ApiResponse(responseCode = "404", description = "사용자의 주 경로가 없어 조회에 실패한 경우",
+        content = @Content(schema = @Schema(implementation = ErrorResult.class),
+          examples = @ExampleObject(
+            value = "{\n"
+              + "    \"status\": \"NOT_FOUND\",\n"
+              + "    \"message\": \"해당하는 사용자의 주 산책 경로가 존재하지 않습니다.\"\n"
+              + "}"
+          )))
+    }
+  )
   @Operation(summary = "업데이트", description = "현재 로그인되어있는 유저의 주 산책경로를 업데이트합니다. Authorization 헤더를 추가하여 인증 인가 과정을 거칩니다.")
   @PutMapping
   public ResponseEntity<WalkResponse> updateWalk(
