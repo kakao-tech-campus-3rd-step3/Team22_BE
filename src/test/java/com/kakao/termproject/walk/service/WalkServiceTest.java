@@ -7,7 +7,6 @@ import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.repository.MemberRepository;
 import com.kakao.termproject.walk.dto.WalkData;
 import com.kakao.termproject.walk.dto.WalkResponse;
-import com.kakao.termproject.walk.dto.WalkSaveResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

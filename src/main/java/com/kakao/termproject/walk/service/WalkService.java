@@ -1,5 +1,6 @@
 package com.kakao.termproject.walk.service;
 
+import com.kakao.termproject.exception.custom.DataAlreadyExistException;
 import com.kakao.termproject.exception.custom.DataNotFoundException;
 import com.kakao.termproject.map.dto.MapResponse;
 import com.kakao.termproject.map.service.MapService;
@@ -7,11 +8,8 @@ import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.walk.domain.Walk;
 import com.kakao.termproject.walk.dto.WalkData;
 import com.kakao.termproject.walk.dto.WalkResponse;
-import com.kakao.termproject.walk.dto.WalkSaveResponse;
 import com.kakao.termproject.walk.repository.WalkRepository;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,13 +27,7 @@ public class WalkService {
 
     updateSlopes(walk);
 
-    return new WalkResponse(
-      walk.getId(),
-      walk.getMaxSlope(),
-      walk.getAvgOfSlope(),
-      walk.getUpdateDateTime(),
-      walk.getWalk()
-    );
+    return convertToDTO(walk);
   }
 
   private void updateSlopes(Walk walk) {
@@ -43,45 +35,48 @@ public class WalkService {
 
     walk.updateSlopes(
       mapResponse.maxSlope(),
-      mapResponse.avgOfSlope(),
-      LocalDateTime.now()
+      mapResponse.avgOfSlope()
     );
   }
 
   @Transactional
-  public WalkSaveResponse saveWalk(Member member, WalkData walkData) {
+  public WalkResponse saveWalk(Member member, WalkData walkData) {
+
+    walkRepository.findByMember(member)
+      .ifPresent(w -> {
+        throw new DataAlreadyExistException("해당하는 사용자의 주 산책 경로가 이미 존재합니다.");
+      });
+    
     MapResponse mapResponse = mapService.getFitness(walkData.coordinates());
 
-    return walkRepository.findByMember(member)
-      .map(walk -> new WalkSaveResponse(HttpStatus.OK, updateWalk(walk, walkData, mapResponse)))
-      .orElseGet(
-        () -> new WalkSaveResponse(HttpStatus.CREATED, createWalk(walkData, mapResponse, member)));
-  }
-
-  private WalkResponse updateWalk(Walk walk, WalkData walkData, MapResponse mapResponse) {
-    walk.updateWalk(
-      walkData,
-      mapResponse.maxSlope(),
-      mapResponse.avgOfSlope(),
-      LocalDateTime.now()
-    );
-
-    return convertToDTO(walk);
-  }
-
-  private WalkResponse createWalk(WalkData walkData, MapResponse mapResponse, Member member) {
-    Walk walk = walkRepository.save(
+    Walk createdWalk = walkRepository.save(
       new Walk(
         walkData,
         mapResponse.maxSlope(),
         mapResponse.avgOfSlope(),
-        LocalDateTime.now(),
         member
       )
     );
 
+    return convertToDTO(createdWalk);
+  }
+
+  @Transactional
+  public WalkResponse updateWalk(Member member, WalkData walkData) {
+    Walk walk = walkRepository.findByMember(member)
+      .orElseThrow(() -> new DataNotFoundException("해당하는 사용자의 주 산책 경로가 존재하지 않습니다."));
+
+    MapResponse mapResponse = mapService.getFitness(walkData.coordinates());
+
+    walk.updateWalk(
+      walkData,
+      mapResponse.maxSlope(),
+      mapResponse.avgOfSlope()
+    );
+
     return convertToDTO(walk);
   }
+
 
   private WalkResponse convertToDTO(Walk walk) {
     return new WalkResponse(
