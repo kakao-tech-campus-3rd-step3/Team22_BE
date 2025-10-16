@@ -57,6 +57,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
 
     steps:
       - name: EC2 접속 후 배포

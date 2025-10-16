@@ -40,7 +40,17 @@ public class Walk {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  public Walk(WalkData walk, Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime) {
+  public Walk(WalkData walk, Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime,
+    Member member) {
+    this.walk = walk;
+    this.maxSlope = maxSlope;
+    this.avgOfSlope = avgOfSlope;
+    this.updateDateTime = updateDateTime;
+    this.member = member;
+  }
+
+  public void updateWalk(WalkData walk, Double maxSlope, Double avgOfSlope,
+    LocalDateTime updateDateTime) {
     this.walk = walk;
     this.maxSlope = maxSlope;
     this.avgOfSlope = avgOfSlope;
