@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(value = PetNotFoundException.class)
-  public ResponseEntity<ErrorResult> PetNotFoundException(UserNotFoundException e) {
+  public ResponseEntity<ErrorResult> PetNotFoundException(PetNotFoundException e) {
     return ResponseEntity
       .status(HttpStatus.NOT_FOUND)
       .body(new ErrorResult(
