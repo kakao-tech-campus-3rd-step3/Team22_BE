@@ -82,7 +82,7 @@ public class PostController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<PostResponse> deletePost(
+  public ResponseEntity<Void> deletePost(
     @AuthenticationPrincipal Member member,
     @PathVariable Long id) {
     log.info("delete post id: {}", id);
