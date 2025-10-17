@@ -1,7 +1,7 @@
 package com.kakao.termproject.walk.domain;
 
 import com.kakao.termproject.user.domain.Member;
-import com.kakao.termproject.walk.domain.converter.WalkDataConverter;
+import com.kakao.termproject.converter.WalkDataConverter;
 import com.kakao.termproject.walk.dto.WalkData;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

@@ -5,6 +5,7 @@ import com.kakao.termproject.exception.custom.EmailDuplicationException;
 import com.kakao.termproject.exception.custom.InvalidPasswordException;
 import com.kakao.termproject.exception.custom.InvalidTokenException;
 import com.kakao.termproject.exception.custom.JsonParseException;
+import com.kakao.termproject.exception.custom.OwnerMismatchException;
 import com.kakao.termproject.exception.custom.PetNotFoundException;
 import com.kakao.termproject.exception.custom.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -82,24 +83,36 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(value = PetNotFoundException.class)
   public ResponseEntity<ErrorResult> PetNotFoundException(UserNotFoundException e) {
     return ResponseEntity
-        .status(HttpStatus.NOT_FOUND)
-        .body(new ErrorResult(
-                HttpStatus.NOT_FOUND,
-                e.getMessage(),
-                e.getStackTrace()
-            )
-        );
+      .status(HttpStatus.NOT_FOUND)
+      .body(new ErrorResult(
+          HttpStatus.NOT_FOUND,
+          e.getMessage(),
+          e.getStackTrace()
+        )
+      );
   }
 
   @ExceptionHandler(value = InvalidTokenException.class)
   public ResponseEntity<ErrorResult> InvalidTokenException(InvalidTokenException e) {
     return ResponseEntity
-        .status(HttpStatus.UNAUTHORIZED)
-        .body(new ErrorResult(
-                HttpStatus.UNAUTHORIZED,
-                e.getMessage(),
-                e.getStackTrace()
-            )
-        );
+      .status(HttpStatus.UNAUTHORIZED)
+      .body(new ErrorResult(
+          HttpStatus.UNAUTHORIZED,
+          e.getMessage(),
+          e.getStackTrace()
+        )
+      );
+  }
+
+  @ExceptionHandler(value = OwnerMismatchException.class)
+  public ResponseEntity<ErrorResult> ownerMismatchException(OwnerMismatchException e) {
+    return ResponseEntity
+      .status(HttpStatus.FORBIDDEN)
+      .body(new ErrorResult(
+          HttpStatus.FORBIDDEN,
+          e.getMessage(),
+          e.getStackTrace()
+        )
+      );
   }
 }
