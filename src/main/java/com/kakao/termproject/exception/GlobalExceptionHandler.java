@@ -3,6 +3,7 @@ package com.kakao.termproject.exception;
 import com.kakao.termproject.exception.custom.DataNotFoundException;
 import com.kakao.termproject.exception.custom.EmailDuplicationException;
 import com.kakao.termproject.exception.custom.InvalidPasswordException;
+import com.kakao.termproject.exception.custom.InvalidTokenException;
 import com.kakao.termproject.exception.custom.JsonParseException;
 import com.kakao.termproject.exception.custom.PetNotFoundException;
 import com.kakao.termproject.exception.custom.UserNotFoundException;
@@ -84,6 +85,18 @@ public class GlobalExceptionHandler {
         .status(HttpStatus.NOT_FOUND)
         .body(new ErrorResult(
                 HttpStatus.NOT_FOUND,
+                e.getMessage(),
+                e.getStackTrace()
+            )
+        );
+  }
+
+  @ExceptionHandler(value = InvalidTokenException.class)
+  public ResponseEntity<ErrorResult> InvalidTokenException(InvalidTokenException e) {
+    return ResponseEntity
+        .status(HttpStatus.UNAUTHORIZED)
+        .body(new ErrorResult(
+                HttpStatus.UNAUTHORIZED,
                 e.getMessage(),
                 e.getStackTrace()
             )

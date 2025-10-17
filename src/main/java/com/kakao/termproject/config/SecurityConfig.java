@@ -35,7 +35,7 @@ public class SecurityConfig {
       .authorizeHttpRequests((auth) -> auth
         .requestMatchers("/ws/**", "/api/dev/**").permitAll()
         .requestMatchers("/", "/index.html", "/error").permitAll()
-        .requestMatchers("/api/user/").authenticated()
+        .requestMatchers("/api/user/", "/api/walks").authenticated()
         .anyRequest().permitAll())
       .cors(cors -> cors.configurationSource(corsConfigurationSource))
       .sessionManagement((session) ->
@@ -50,7 +50,7 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of("https://spring-gift.store"));
+    configuration.setAllowedOrigins(List.of("https://spring-gift.store", "http://localhost:5173", "https://petmatewalk.vercel.app"));
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(List.of("*"));
     configuration.setAllowCredentials(true);

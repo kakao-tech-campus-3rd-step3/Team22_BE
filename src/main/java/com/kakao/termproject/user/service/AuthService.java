@@ -1,11 +1,15 @@
 package com.kakao.termproject.user.service;
 
 import com.kakao.termproject.exception.custom.EmailDuplicationException;
+import com.kakao.termproject.exception.custom.InvalidTokenException;
+import com.kakao.termproject.exception.custom.UserNotFoundException;
 import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.dto.LoginRequest;
 import com.kakao.termproject.user.dto.RegisterRequest;
+import com.kakao.termproject.user.dto.TokenResponse;
 import com.kakao.termproject.user.jwt.JwtUtil;
 import com.kakao.termproject.user.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +27,8 @@ public class AuthService {
   private final AuthenticationManager authenticationManager;
   private final JwtUtil jwtUtil;
 
-  public String register(RegisterRequest request) {
+  @Transactional
+  public TokenResponse register(RegisterRequest request) {
 
     if(memberRepository.findUserByEmail(request.email()).isPresent()){
       throw new EmailDuplicationException("중복된 이메일입니다");
@@ -36,25 +41,57 @@ public class AuthService {
         request.username(),
         encodedPassword);
 
-    memberRepository.save(member);
+    Member savedMember = memberRepository.save(member);
 
     Authentication auth = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.email(), request.password())
     );
     SecurityContextHolder.getContext().setAuthentication(auth);
 
-    return jwtUtil.createAccessToken(member);
+    String accessToken =  jwtUtil.createAccessToken(savedMember);
+    String refreshToken = jwtUtil.createRefreshToken(savedMember);
+
+    return new TokenResponse(accessToken, refreshToken);
   }
 
 
-  public String login(LoginRequest request) {
+  @Transactional
+  public TokenResponse login(LoginRequest request) {
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.email(), request.password())
     );
 
     Member member = (Member) authentication.getPrincipal();
 
+    String accessToken =  jwtUtil.createAccessToken(member);
+    String refreshToken = jwtUtil.createRefreshToken(member);
+
+    member.updateRefreshToken(refreshToken);
+    memberRepository.save(member);
+
+    return new TokenResponse(accessToken, refreshToken);
+  }
+
+  public String reissueAccessToken(String refreshToken) {
+
+    if (!jwtUtil.verifyToken(refreshToken)) {
+      throw new InvalidTokenException("유효하지 않은 토큰");
+    }
+
+    String email = jwtUtil.getEmail(refreshToken);
+    Member member = memberRepository.findUserByEmail(email)
+        .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없음"));
+
+    if (!refreshToken.equals(member.getRefreshToken())) {
+      throw new InvalidTokenException("유효하지 않은 토큰");
+    }
+
     return jwtUtil.createAccessToken(member);
   }
 
+  @Transactional
+  public void logout(Member member){
+    member.clearRefreshToken();
+    memberRepository.save(member);
+  }
 }

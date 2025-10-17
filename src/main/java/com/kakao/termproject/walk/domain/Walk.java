@@ -1,7 +1,10 @@
 package com.kakao.termproject.walk.domain;
 
 import com.kakao.termproject.user.domain.Member;
+import com.kakao.termproject.walk.domain.converter.WalkDataConverter;
+import com.kakao.termproject.walk.dto.WalkData;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +27,8 @@ public class Walk {
   private Long id;
 
   @Column(columnDefinition = "TEXT")
-  private String walk;
+  @Convert(converter = WalkDataConverter.class)
+  private WalkData walk;
 
   private Double maxSlope;
 
@@ -35,7 +40,17 @@ public class Walk {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  public Walk(String walk, Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime) {
+  public Walk(WalkData walk, Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime,
+    Member member) {
+    this.walk = walk;
+    this.maxSlope = maxSlope;
+    this.avgOfSlope = avgOfSlope;
+    this.updateDateTime = updateDateTime;
+    this.member = member;
+  }
+
+  public void updateWalk(WalkData walk, Double maxSlope, Double avgOfSlope,
+    LocalDateTime updateDateTime) {
     this.walk = walk;
     this.maxSlope = maxSlope;
     this.avgOfSlope = avgOfSlope;
@@ -43,8 +58,12 @@ public class Walk {
   }
 
   public void updateSlopes(Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime) {
-    this.maxSlope = maxSlope;
-    this.avgOfSlope = avgOfSlope;
-    this.updateDateTime = updateDateTime;
+    long monthDiff = ChronoUnit.WEEKS.between(this.updateDateTime, LocalDateTime.now());
+
+    if (Math.abs(monthDiff) >= 2) { // 2주 간격으로 경사도 업데이트
+      this.maxSlope = maxSlope;
+      this.avgOfSlope = avgOfSlope;
+      this.updateDateTime = updateDateTime;
+    }
   }
 }
