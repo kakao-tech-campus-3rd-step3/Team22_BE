@@ -23,6 +23,7 @@ class PersonalizationWeightPolicyTest {
   private static final LocalDateTime NOT_HOT_HOUR = LocalDateTime.of(2025, 10, 1, 20, 0);
   private static final BigDecimal SMALL_DOG_UNDER_WEIGHT = BigDecimal.valueOf(4);
   private static final BigDecimal SMALL_DOG_NORMAL_WEIGHT = BigDecimal.valueOf(6);
+  private static final BigDecimal LARGE_DOG_NORMAL_WEIGHT = BigDecimal.valueOf(15);
 
   @BeforeEach
   void setUp() {
@@ -110,6 +111,21 @@ class PersonalizationWeightPolicyTest {
   }
 
   @Test
+  void 비단두_대형견_긴_경로_산책() {
+    //given
+    WalkScoreContext context = createContext(
+        createPet("LARGE_PET"),
+        createWalk(4000, 1000),
+        createWeather(20, 50, 10, NOT_HOT_HOUR)
+    );
+    //when
+    double weight = personalizationWeightPolicy.calculateWeight(context);
+
+    //then 비단두 1.2 대형 1.7
+    assertEquals(1.2 * 1.7, weight, 0.001);
+  }
+
+  @Test
   void 심장질환이_있고_미세먼지가_나쁜_날_산책() {
     // given
     WalkScoreContext context = createContext(
@@ -162,6 +178,11 @@ class PersonalizationWeightPolicyTest {
       case "UNDERWEIGHT_SMALL_PET":
         when(pet.getBreed()).thenReturn("Maltese");
         when(pet.getWeight()).thenReturn(SMALL_DOG_UNDER_WEIGHT); // 5kg 미만
+        when(pet.getChronicDisease()).thenReturn("없음");
+        break;
+      case "LARGE_PET":
+        when(pet.getBreed()).thenReturn("Golden Retriever");
+        when(pet.getWeight()).thenReturn(LARGE_DOG_NORMAL_WEIGHT);
         when(pet.getChronicDisease()).thenReturn("없음");
         break;
       case "HEART_DISEASE_PET":
