@@ -6,6 +6,7 @@ import com.kakao.termproject.exception.custom.EmailDuplicationException;
 import com.kakao.termproject.exception.custom.InvalidPasswordException;
 import com.kakao.termproject.exception.custom.InvalidTokenException;
 import com.kakao.termproject.exception.custom.JsonParseException;
+import com.kakao.termproject.exception.custom.OwnerMismatchException;
 import com.kakao.termproject.exception.custom.PetNotFoundException;
 import com.kakao.termproject.exception.custom.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -107,9 +108,21 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(value = DataAlreadyExistException.class)
   public ResponseEntity<ErrorResult> dataAlreadyExistException(DataAlreadyExistException e) {
     return ResponseEntity
-      .status(HttpStatus.CONFLICT)
+      .status(HttpStatus.UNAUTHORIZED)
       .body(new ErrorResult(
-          HttpStatus.CONFLICT,
+          HttpStatus.UNAUTHORIZED,
+          e.getMessage(),
+          e.getStackTrace()
+        )
+      );
+  }
+
+  @ExceptionHandler(value = OwnerMismatchException.class)
+  public ResponseEntity<ErrorResult> ownerMismatchException(OwnerMismatchException e) {
+    return ResponseEntity
+      .status(HttpStatus.FORBIDDEN)
+      .body(new ErrorResult(
+          HttpStatus.FORBIDDEN,
           e.getMessage(),
           e.getStackTrace()
         )
