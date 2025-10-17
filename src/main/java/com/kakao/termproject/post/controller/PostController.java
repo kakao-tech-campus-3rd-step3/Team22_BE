@@ -87,6 +87,6 @@ public class PostController {
     @PathVariable Long id) {
     log.info("delete post id: {}", id);
     postService.deletePost(id, member);
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    return ResponseEntity.noContent().build();
   }
 }
