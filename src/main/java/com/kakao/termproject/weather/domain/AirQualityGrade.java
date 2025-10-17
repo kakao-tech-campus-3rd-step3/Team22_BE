@@ -1,5 +1,6 @@
 package com.kakao.termproject.weather.domain;
 
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,12 +16,10 @@ public enum AirQualityGrade {
   private final int penalty;
 
   public static AirQualityGrade of(double pm2_5Value) {
-    for (AirQualityGrade grade : AirQualityGrade.values()) {
-      if (pm2_5Value >= grade.threshold) {
-        return grade;
-      }
-    }
-    return GOOD;
+    return Arrays.stream(values())
+        .filter(grade -> pm2_5Value >= grade.threshold)
+        .findFirst()
+        .orElse(GOOD);
   }
 
 }

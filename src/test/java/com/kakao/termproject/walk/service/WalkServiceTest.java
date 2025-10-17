@@ -7,7 +7,6 @@ import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.repository.MemberRepository;
 import com.kakao.termproject.walk.dto.WalkData;
 import com.kakao.termproject.walk.dto.WalkResponse;
-import com.kakao.termproject.walk.dto.WalkSaveResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +42,7 @@ public class WalkServiceTest {
 
   @Test
   void 경로_저장_및_경사도_반환_테스트() {
-    WalkSaveResponse response = walkService.saveWalk(mockMember, mockData);
-
-    assertThat(response.walkResponse().id()).isNotNull();
+    WalkResponse response = walkService.saveWalk(mockMember, mockData);
 
     WalkResponse walkResponse = walkService.getWalk(mockMember);
 

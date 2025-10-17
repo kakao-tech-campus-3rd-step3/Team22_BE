@@ -1,9 +1,10 @@
 package com.kakao.termproject.walkscore.service;
 
+import com.kakao.termproject.exception.custom.DataNotFoundException;
 import com.kakao.termproject.pet.domain.Pet;
-import com.kakao.termproject.pet.service.PetService;
+import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.walk.domain.Walk;
-import com.kakao.termproject.walk.service.WalkService;
+import com.kakao.termproject.walk.repository.WalkRepository;
 import com.kakao.termproject.weather.dto.WeatherDetailInternal;
 import com.kakao.termproject.weather.dto.WeatherResponse;
 import com.kakao.termproject.weather.dto.WeatherResponse.HourlyForecast;
@@ -18,13 +19,16 @@ import org.springframework.stereotype.Service;
 public class WalkScoreService {
 
   private final WalkScoreCalculator walkScoreCalculator;
-  private final PetService petService;
-  private final WalkService walkService;
+  private final WalkRepository walkRepository;
 
   public WeatherResponse getWalkScoreForecast(List<WeatherDetailInternal> weatherDetailInternals,
-      Long petId, Long walkId) {
-    Pet pet = petService.get(petId);
-    Walk walk = walkService.get(walkId);
+      Member member) {
+    Pet pet = member.getPet();
+    if (pet == null) {
+      throw new DataNotFoundException("해당하는 사용자의 반려견 정보가 존재하지 않습니다.");
+    }
+    Walk walk = walkRepository.findByMember(member)
+        .orElseThrow(() -> new DataNotFoundException("해당하는 사용자의 주 산책 경로가 존재하지 않습니다."));
 
     List<HourlyForecast> forecasts = weatherDetailInternals.stream()
         .map(forecast -> new HourlyForecast(

@@ -41,7 +41,7 @@ public record WeatherApiResponse(
   }
 
   public record SysInfo(
-      String partOfDay //"d" 또는 "n". day or night
+      @JsonProperty("pod") String partOfDay //"d" 또는 "n". day or night
   ) {
 
   }
