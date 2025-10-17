@@ -51,7 +51,7 @@ public class PostController {
   @GetMapping
   public ResponseEntity<Page<PostResponse>> getPosts(
     @RequestParam(required = false) Long memberId,
-    PagedQuery pagedQuery
+    @Valid PagedQuery pagedQuery
   ) {
     log.info("get posts");
 
@@ -66,7 +66,7 @@ public class PostController {
   @GetMapping("/my")
   public ResponseEntity<Page<PostResponse>> getMyPosts(
     @AuthenticationPrincipal Member member,
-    PagedQuery pagedQuery
+    @Valid PagedQuery pagedQuery
   ) {
     log.info("get my posts");
     return ResponseEntity.ok(postService.getMyPosts(member, pagedQuery));
