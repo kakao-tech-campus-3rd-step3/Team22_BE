@@ -1,12 +1,14 @@
 package com.kakao.termproject.history.controller;
 
 import com.kakao.termproject.history.dto.HistoryResponse;
+import com.kakao.termproject.history.dto.PagedQuery;
 import com.kakao.termproject.history.service.HistoryService;
 import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.walk.dto.WalkData;
-import java.util.List;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +30,7 @@ public class HistoryController {
   @PostMapping
   public ResponseEntity<HistoryResponse> saveHistory(
     @AuthenticationPrincipal Member member,
-    @RequestBody WalkData data
+    @RequestBody @Valid WalkData data
   ) {
     log.info("History save Request");
     return ResponseEntity.status(HttpStatus.CREATED)
@@ -45,10 +47,11 @@ public class HistoryController {
   }
 
   @GetMapping
-  public ResponseEntity<List<HistoryResponse>> getHistoryList(
-    @AuthenticationPrincipal Member member
+  public ResponseEntity<Page<HistoryResponse>> getHistoryList(
+    @AuthenticationPrincipal Member member,
+    PagedQuery pagedQuery
   ) {
     log.info("History get list request");
-    return ResponseEntity.ok(historyService.getAllHistories(member));
+    return ResponseEntity.ok(historyService.getAllHistories(member, pagedQuery));
   }
 }
