@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,8 +27,10 @@ public class Post {
 
   private String content;
 
+  @CreatedDate
   private LocalDateTime createdAt;
 
+  @LastModifiedDate
   private LocalDateTime updatedAt;
 
   @ManyToOne
@@ -36,18 +40,11 @@ public class Post {
   public Post(String title, String content, Member member) {
     this.title = title;
     this.content = content;
-    this.createdAt = LocalDateTime.now();
-    this.updatedAt = LocalDateTime.now();
     this.member = member;
   }
 
   public void updatePost(String title, String content) {
-    if (title != null) {
-      this.title = title;
-    }
-    if (content != null) {
-      this.content = content;
-    }
-    this.updatedAt = LocalDateTime.now();
+    this.title = title;
+    this.content = content;
   }
 }
