@@ -108,9 +108,9 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(value = DataAlreadyExistException.class)
   public ResponseEntity<ErrorResult> dataAlreadyExistException(DataAlreadyExistException e) {
     return ResponseEntity
-      .status(HttpStatus.UNAUTHORIZED)
+      .status(HttpStatus.CONFLICT)
       .body(new ErrorResult(
-          HttpStatus.UNAUTHORIZED,
+          HttpStatus.CONFLICT,
           e.getMessage(),
           e.getStackTrace()
         )

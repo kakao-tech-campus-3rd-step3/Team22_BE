@@ -43,7 +43,6 @@ public class HistoryController {
     @AuthenticationPrincipal Member member,
     @RequestBody @Valid WalkData data
   ) {
-    log.info("History save Request");
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(historyService.saveHistory(data, member));
   }
@@ -74,7 +73,6 @@ public class HistoryController {
     @AuthenticationPrincipal Member member,
     @PathVariable Long id
   ) {
-    log.info("History get request");
     return ResponseEntity.ok(historyService.getHistory(id, member));
   }
 
@@ -85,7 +83,6 @@ public class HistoryController {
     @AuthenticationPrincipal Member member,
     PagedQuery pagedQuery
   ) {
-    log.info("History get list request");
     return ResponseEntity.ok(historyService.getAllHistories(member, pagedQuery));
   }
 }
