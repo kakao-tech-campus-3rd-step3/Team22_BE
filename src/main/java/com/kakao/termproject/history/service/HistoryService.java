@@ -34,7 +34,7 @@ public class HistoryService {
     History history = historyRepository.findById(id)
       .orElseThrow(() -> new DataNotFoundException("해당 id를 가진 산책 기록이 존재하지 않습니다."));
 
-    if (!history.getMember().getId().equals(member.getId())) {
+    if (!history.isOwner(member)) {
       throw new OwnerMismatchException("접근 권한이 없습니다.");
     }
 

@@ -41,4 +41,8 @@ public class History {
     this.walk = walk;
     this.member = member;
   }
+
+  public boolean isOwner(Member member) {
+    return this.member.getId().equals(member.getId());
+  }
 }
