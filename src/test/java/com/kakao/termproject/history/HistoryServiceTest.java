@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.kakao.termproject.exception.custom.OwnerMismatchException;
 import com.kakao.termproject.history.dto.HistoryResponse;
-import com.kakao.termproject.history.dto.PagedQuery;
 import com.kakao.termproject.history.repository.HistoryRepository;
 import com.kakao.termproject.history.service.HistoryService;
 import com.kakao.termproject.map.dto.Coordinate;
@@ -19,6 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 @SpringBootTest
@@ -82,9 +84,9 @@ public class HistoryServiceTest {
     for (int i = 0; i < 5; i++) {
       historyService.saveHistory(mockData, mockMember);
     }
-    PagedQuery pagedQuery = new PagedQuery(0, 3, Direction.ASC, "createdAt");
+    Pageable pageable = PageRequest.of(0, 5, Sort.by(Direction.ASC, "createdAt"));
 
-    Page<HistoryResponse> responses = historyService.getAllHistories(mockMember, pagedQuery);
+    Page<HistoryResponse> responses = historyService.getAllHistories(mockMember, pageable);
 
     assertThat(responses.getTotalElements()).isGreaterThanOrEqualTo(5);
   }
