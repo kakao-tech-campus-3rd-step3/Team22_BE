@@ -42,13 +42,7 @@ public class HistoryService {
   }
 
   @Transactional(readOnly = true)
-  public Page<HistoryResponse> getAllHistories(Member member, PagedQuery pagedQuery) {
-    Pageable pageable = PageRequest.of(
-      pagedQuery.page(),
-      pagedQuery.size(),
-      Sort.by(pagedQuery.direction(), pagedQuery.criteria())
-    );
-
+  public Page<HistoryResponse> getAllHistories(Member member, Pageable pageable) {
     Page<History> histories = historyRepository.findAllByMember(member, pageable);
 
     return histories.map(this::convertToDTO);

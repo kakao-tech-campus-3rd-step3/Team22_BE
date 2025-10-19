@@ -10,6 +10,10 @@ spring:
         static: ap-northeast-2
   config:
     import: aws-parameterstore:/project/v1/
+  data:
+    web:
+      pageable:
+        serialization-mode: via_dto
 
 jwt:
   secret: ${jwt_secret}
