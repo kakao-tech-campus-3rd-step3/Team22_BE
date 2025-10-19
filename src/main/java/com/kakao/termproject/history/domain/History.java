@@ -43,6 +43,9 @@ public class History {
   }
 
   public boolean isOwner(Member member) {
-    return this.member.getId().equals(member.getId());
+    if (this.member != null && member != null) {
+      return this.member.getId().equals(member.getId());
+    }
+    return false;
   }
 }
