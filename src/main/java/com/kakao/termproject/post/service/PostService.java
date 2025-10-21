@@ -1,6 +1,7 @@
 package com.kakao.termproject.post.service;
 
 import com.kakao.termproject.exception.custom.DataNotFoundException;
+import com.kakao.termproject.exception.custom.OwnerMismatchException;
 import com.kakao.termproject.exception.custom.UserNotFoundException;
 import com.kakao.termproject.post.domain.Post;
 import com.kakao.termproject.post.dto.PagedQuery;
@@ -75,7 +76,7 @@ public class PostService {
       .orElseThrow(() -> new DataNotFoundException("해당 게시글을 찾을 수 없습니다."));
 
     if (!post.getMember().getId().equals(member.getId())) {
-      // throw new OwnerMismatchException("접근 권한이 없습니다.");
+      throw new OwnerMismatchException("접근 권한이 없습니다.");
     }
 
     post.updatePost(postRequest.title(), postRequest.content());
@@ -89,7 +90,7 @@ public class PostService {
       .orElseThrow(() -> new DataNotFoundException("해당 게시글을 찾을 수 없습니다."));
 
     if (!post.getMember().getId().equals(member.getId())) {
-      // throw new OwnerMismatchException("접근 권한이 없습니다.");
+      throw new OwnerMismatchException("접근 권한이 없습니다.");
     }
 
     postRepository.deleteById(id);
