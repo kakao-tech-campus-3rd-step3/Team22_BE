@@ -1,6 +1,5 @@
 package com.kakao.termproject.post.controller;
 
-import com.kakao.termproject.post.dto.PagedQuery;
 import com.kakao.termproject.post.dto.PostRequest;
 import com.kakao.termproject.post.dto.PostResponse;
 import com.kakao.termproject.post.service.PostService;
