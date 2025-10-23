@@ -27,9 +27,11 @@ public class ImageService {
     Post post = postRepository.findById(postId)
       .orElseThrow(() -> new DataNotFoundException("게시글이 존재하지 않습니다."));
 
-    images.forEach(image -> {
-      imageRepository.save(new Image(image, post));
-    });
+    List<Image> imageEntities = images.stream()
+      .map(imageName -> new Image(imageName, post))
+      .toList();
+
+    imageRepository.saveAll(imageEntities);
 
     return new ImageResponse(postId, images);
   }
