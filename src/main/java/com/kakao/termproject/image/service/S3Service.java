@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.Delete;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
+import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
@@ -71,30 +73,30 @@ public class S3Service {
       throw new BadFormatException();
     }
 
-    return fileName.substring(fileName.lastIndexOf("."));
+    return ext;
   }
 
   public List<String> getImages(List<String> fileNames) {
-    List<String> results = new ArrayList<>();
-
-    fileNames.forEach(fileName -> {
-      String result = s3Client.utilities()
-        .getUrl(url -> url.bucket(bucketName).key(FILE_PATH + fileName)).toString();
-
-      results.add(result);
-    });
-
-    return results;
+    return fileNames.stream()
+      .map(fileName -> s3Client.utilities()
+        .getUrl(url -> url.bucket(bucketName).key(FILE_PATH + fileName)).toString())
+      .toList();
   }
 
   public void delete(List<String> files) {
-    files.forEach(file -> {
-      s3Client.deleteObject(
-        DeleteObjectRequest.builder()
-          .bucket(bucketName)
-          .key(FILE_PATH + file)
-          .build()
-      );
-    });
+    List<ObjectIdentifier> objects = files.stream()
+      .map(file -> ObjectIdentifier.builder()
+        .key(FILE_PATH + file)
+        .build())
+      .toList();
+
+    DeleteObjectsRequest deleteObjectsRequest = DeleteObjectsRequest.builder()
+      .bucket(bucketName)
+      .delete(Delete.builder()
+        .objects(objects)
+        .build())
+      .build();
+
+    s3Client.deleteObjects(deleteObjectsRequest);
   }
 }
