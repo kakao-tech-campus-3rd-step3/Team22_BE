@@ -29,8 +29,7 @@ public class GlobalExceptionHandler {
       .body(
         new ErrorResult(
           HttpStatus.NOT_FOUND,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -42,8 +41,7 @@ public class GlobalExceptionHandler {
       .body(
         new ErrorResult(
           HttpStatus.BAD_REQUEST,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -55,8 +53,7 @@ public class GlobalExceptionHandler {
       .body(
         new ErrorResult(
           HttpStatus.CONFLICT,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -68,8 +65,7 @@ public class GlobalExceptionHandler {
       .body(
         new ErrorResult(
           HttpStatus.UNAUTHORIZED,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -80,8 +76,7 @@ public class GlobalExceptionHandler {
       .status(HttpStatus.NOT_FOUND)
       .body(new ErrorResult(
           HttpStatus.NOT_FOUND,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -92,8 +87,7 @@ public class GlobalExceptionHandler {
       .status(HttpStatus.NOT_FOUND)
       .body(new ErrorResult(
           HttpStatus.NOT_FOUND,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -104,8 +98,7 @@ public class GlobalExceptionHandler {
       .status(HttpStatus.UNAUTHORIZED)
       .body(new ErrorResult(
           HttpStatus.UNAUTHORIZED,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -116,8 +109,7 @@ public class GlobalExceptionHandler {
       .status(HttpStatus.UNAUTHORIZED)
       .body(new ErrorResult(
           HttpStatus.UNAUTHORIZED,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -128,8 +120,7 @@ public class GlobalExceptionHandler {
       .status(HttpStatus.FORBIDDEN)
       .body(new ErrorResult(
           HttpStatus.FORBIDDEN,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -140,8 +131,7 @@ public class GlobalExceptionHandler {
       .status(HttpStatus.BAD_REQUEST)
       .body(new ErrorResult(
           HttpStatus.BAD_REQUEST,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -152,8 +142,7 @@ public class GlobalExceptionHandler {
       .status(HttpStatus.BAD_REQUEST)
       .body(new ErrorResult(
           HttpStatus.BAD_REQUEST,
-          e.getMessage(),
-          e.getStackTrace()
+          e.getMessage()
         )
       );
   }
@@ -168,8 +157,7 @@ public class GlobalExceptionHandler {
           .getFieldErrors()
           .stream()
           .map(MessageSourceResolvable::getDefaultMessage)
-          .collect(Collectors.joining(" ")),
-        e.getStackTrace()
+          .collect(Collectors.joining(" "))
       ),
       HttpStatus.BAD_REQUEST
     );
