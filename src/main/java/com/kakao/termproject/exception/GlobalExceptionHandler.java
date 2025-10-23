@@ -1,16 +1,21 @@
 package com.kakao.termproject.exception;
 
+import com.kakao.termproject.exception.custom.BadFormatException;
 import com.kakao.termproject.exception.custom.DataAlreadyExistException;
 import com.kakao.termproject.exception.custom.DataNotFoundException;
 import com.kakao.termproject.exception.custom.EmailDuplicationException;
+import com.kakao.termproject.exception.custom.FailedToUploadException;
 import com.kakao.termproject.exception.custom.InvalidPasswordException;
 import com.kakao.termproject.exception.custom.InvalidTokenException;
 import com.kakao.termproject.exception.custom.JsonParseException;
 import com.kakao.termproject.exception.custom.OwnerMismatchException;
 import com.kakao.termproject.exception.custom.PetNotFoundException;
 import com.kakao.termproject.exception.custom.UserNotFoundException;
+import java.util.stream.Collectors;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -127,5 +132,46 @@ public class GlobalExceptionHandler {
           e.getStackTrace()
         )
       );
+  }
+
+  @ExceptionHandler(value = BadFormatException.class)
+  public ResponseEntity<ErrorResult> badFormatException(BadFormatException e) {
+    return ResponseEntity
+      .status(HttpStatus.BAD_REQUEST)
+      .body(new ErrorResult(
+          HttpStatus.BAD_REQUEST,
+          e.getMessage(),
+          e.getStackTrace()
+        )
+      );
+  }
+
+  @ExceptionHandler(value = FailedToUploadException.class)
+  public ResponseEntity<ErrorResult> failedToUploadException(FailedToUploadException e) {
+    return ResponseEntity
+      .status(HttpStatus.BAD_REQUEST)
+      .body(new ErrorResult(
+          HttpStatus.BAD_REQUEST,
+          e.getMessage(),
+          e.getStackTrace()
+        )
+      );
+  }
+
+  @ExceptionHandler(value = MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResult> handleMethodArgumentNotValidException(
+    MethodArgumentNotValidException e) {
+    return new ResponseEntity<>(
+      new ErrorResult(
+        HttpStatus.BAD_REQUEST,
+        e.getBindingResult()
+          .getFieldErrors()
+          .stream()
+          .map(MessageSourceResolvable::getDefaultMessage)
+          .collect(Collectors.joining(" ")),
+        e.getStackTrace()
+      ),
+      HttpStatus.BAD_REQUEST
+    );
   }
 }
