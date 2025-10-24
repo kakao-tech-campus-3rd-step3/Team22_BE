@@ -1,7 +1,7 @@
 package com.kakao.termproject.walk.domain;
 
 import com.kakao.termproject.user.domain.Member;
-import com.kakao.termproject.walk.domain.converter.WalkDataConverter;
+import com.kakao.termproject.converter.WalkDataConverter;
 import com.kakao.termproject.walk.dto.WalkData;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -40,30 +40,30 @@ public class Walk {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  public Walk(WalkData walk, Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime,
-    Member member) {
+  public Walk(WalkData walk, Double maxSlope, Double avgOfSlope, Member member) {
     this.walk = walk;
     this.maxSlope = maxSlope;
     this.avgOfSlope = avgOfSlope;
-    this.updateDateTime = updateDateTime;
+    this.updateDateTime = LocalDateTime.now();
     this.member = member;
   }
 
-  public void updateWalk(WalkData walk, Double maxSlope, Double avgOfSlope,
-    LocalDateTime updateDateTime) {
+  public void updateWalk(WalkData walk, Double maxSlope, Double avgOfSlope) {
     this.walk = walk;
     this.maxSlope = maxSlope;
     this.avgOfSlope = avgOfSlope;
-    this.updateDateTime = updateDateTime;
+    this.updateDateTime = LocalDateTime.now();
   }
 
-  public void updateSlopes(Double maxSlope, Double avgOfSlope, LocalDateTime updateDateTime) {
-    long monthDiff = ChronoUnit.WEEKS.between(this.updateDateTime, LocalDateTime.now());
+  public void updateSlopes(Double maxSlope, Double avgOfSlope) {
+    LocalDateTime now = LocalDateTime.now();
 
-    if (Math.abs(monthDiff) >= 2) { // 2주 간격으로 경사도 업데이트
+    long weeksDiff = ChronoUnit.WEEKS.between(this.updateDateTime, now);
+
+    if (Math.abs(weeksDiff) >= 2) { // 2주 간격으로 경사도 업데이트
       this.maxSlope = maxSlope;
       this.avgOfSlope = avgOfSlope;
-      this.updateDateTime = updateDateTime;
+      this.updateDateTime = now;
     }
   }
 }
