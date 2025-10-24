@@ -8,6 +8,8 @@ spring:
         secret-key: ${SECRET_KEY}
       region:
         static: ap-northeast-2
+      s3:
+        bucket: termproject-s3
   config:
     import: aws-parameterstore:/project/v1/
   data:

@@ -1,6 +1,5 @@
 package com.kakao.termproject.post.controller;
 
-import com.kakao.termproject.post.dto.PagedQuery;
 import com.kakao.termproject.post.dto.PostRequest;
 import com.kakao.termproject.post.dto.PostResponse;
 import com.kakao.termproject.post.service.PostService;
@@ -10,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -51,25 +51,25 @@ public class PostController {
   @GetMapping
   public ResponseEntity<Page<PostResponse>> getPosts(
     @RequestParam(required = false) Long memberId,
-    @Valid PagedQuery pagedQuery
+    Pageable pageable
   ) {
     log.info("get posts");
 
     if (memberId != null) {
       log.info("memberId: {}", memberId);
-      return ResponseEntity.ok(postService.getPostsByMemberId(memberId, pagedQuery));
+      return ResponseEntity.ok(postService.getPostsByMemberId(memberId, pageable));
     }
 
-    return ResponseEntity.ok(postService.getPosts(pagedQuery));
+    return ResponseEntity.ok(postService.getPosts(pageable));
   }
 
   @GetMapping("/my")
   public ResponseEntity<Page<PostResponse>> getMyPosts(
     @AuthenticationPrincipal Member member,
-    @Valid PagedQuery pagedQuery
+    Pageable pageable
   ) {
     log.info("get my posts");
-    return ResponseEntity.ok(postService.getMyPosts(member, pagedQuery));
+    return ResponseEntity.ok(postService.getMyPosts(member, pageable));
   }
 
   @PutMapping("/{id}")

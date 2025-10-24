@@ -1,9 +1,9 @@
 package com.kakao.termproject.post.service;
 
 import com.kakao.termproject.exception.custom.DataNotFoundException;
+import com.kakao.termproject.exception.custom.OwnerMismatchException;
 import com.kakao.termproject.exception.custom.UserNotFoundException;
 import com.kakao.termproject.post.domain.Post;
-import com.kakao.termproject.post.dto.PagedQuery;
 import com.kakao.termproject.post.dto.PostRequest;
 import com.kakao.termproject.post.dto.PostResponse;
 import com.kakao.termproject.post.repository.PostRepository;
@@ -11,9 +11,7 @@ import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,18 +38,14 @@ public class PostService {
   }
 
   @Transactional(readOnly = true)
-  public Page<PostResponse> getPosts(PagedQuery pagedQuery) {
-    Pageable pageable = setPageable(pagedQuery);
-
+  public Page<PostResponse> getPosts(Pageable pageable) {
     Page<Post> posts = postRepository.findAll(pageable);
 
     return posts.map(this::convertToDTO);
   }
 
   @Transactional(readOnly = true)
-  public Page<PostResponse> getPostsByMemberId(Long memberId, PagedQuery pagedQuery) {
-    Pageable pageable = setPageable(pagedQuery);
-
+  public Page<PostResponse> getPostsByMemberId(Long memberId, Pageable pageable) {
     Member member = memberRepository.findById(memberId)
       .orElseThrow(() -> new UserNotFoundException("해당하는 유저가 존재하지 않습니다."));
 
@@ -61,9 +55,7 @@ public class PostService {
   }
 
   @Transactional(readOnly = true)
-  public Page<PostResponse> getMyPosts(Member member, PagedQuery pagedQuery) {
-    Pageable pageable = setPageable(pagedQuery);
-
+  public Page<PostResponse> getMyPosts(Member member, Pageable pageable) {
     Page<Post> posts = postRepository.findAllByMember(member, pageable);
 
     return posts.map(this::convertToDTO);
@@ -75,7 +67,7 @@ public class PostService {
       .orElseThrow(() -> new DataNotFoundException("해당 게시글을 찾을 수 없습니다."));
 
     if (!post.getMember().getId().equals(member.getId())) {
-      // throw new OwnerMismatchException("접근 권한이 없습니다.");
+      throw new OwnerMismatchException("접근 권한이 없습니다.");
     }
 
     post.updatePost(postRequest.title(), postRequest.content());
@@ -89,18 +81,10 @@ public class PostService {
       .orElseThrow(() -> new DataNotFoundException("해당 게시글을 찾을 수 없습니다."));
 
     if (!post.getMember().getId().equals(member.getId())) {
-      // throw new OwnerMismatchException("접근 권한이 없습니다.");
+      throw new OwnerMismatchException("접근 권한이 없습니다.");
     }
 
     postRepository.deleteById(id);
-  }
-
-  private Pageable setPageable(PagedQuery pagedQuery) {
-    return PageRequest.of(
-      pagedQuery.page(),
-      pagedQuery.size(),
-      Sort.by(pagedQuery.direction(), pagedQuery.criteria())
-    );
   }
 
   private PostResponse convertToDTO(Post post) {
