@@ -55,16 +55,16 @@ Swagger를 통해 API 명세서를 자동화하고자 했습니다.
   <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
   <br>
-  
+
   <img src="https://img.shields.io/badge/H2 database-09476B?style=for-the-badge&logo=h2database&logoColor=white">
   <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
   <br>
-  
+
   <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
   <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
   <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
-  
+
 </div>
 
 ## ⚙️ 환경변수
@@ -101,6 +101,18 @@ Swagger를 통해 API 명세서를 자동화하고자 했습니다.
 
 - **날씨 정보 조회**: 사용자는 날씨 정보를 조회할 수 있습니다. 이 때, 등록되어 있는 사용자의 반려견에 맞추어 산책 지수가 표기됩니다.
 
+#### 산책 기록
+
+- **산책 기록 저장**: 사용자가 산책을 마쳤을 때 산책 기록을 저장할 수 있습니다.
+- **산책 기록 조회**: 사용자의 산책 기록을 리스트로 불러올 수 있습니다. 여기서 특정 산책 기록을 단건 조회할 수도 있습니다.
+
+#### 게시글
+
+- **게시글 저장**: 사용자는 소통을 위한 게시글을 업로드할 수 있습니다.
+- **게시글 수정**: 사용자는 게시글을 수정할 수 있습니다.
+- **게시글 삭제**: 사용자는 게시글을 삭제할 수 있습니다.
+- **게시글 조회**: 사용자는 게시글을 단건조회할 수 있습니다. 또한 다른 회원의 게시글 리스트를 조회할 수 있고, 자신의 게시글 리스트를 조회할 수도 있습니다.
+
 더 자세한 내용은 기능 명세서 노션 페이지에서 확인 가능합니다.
 
 [기능 명세서 페이지 바로가기](https://teamsparta.notion.site/24a2dc3ef51480f49307e08214769536?source=copy_link)
@@ -108,6 +120,5 @@ Swagger를 통해 API 명세서를 자동화하고자 했습니다.
 ## 📈 앞으로의 로드맵
 
 1. 사용자와 반려견의 일대다 매핑 도입
-2. 지난 산책 기록 조회 기능 도입
-3. 주 산책 경로 재구성/재등록 기능 도입
-4. 반려견의 비만 여부 확인 및 이에 따른 가중치 테이블 추가
+2. 주 산책 경로 재구성/재등록 기능 도입
+3. 반려견의 비만 여부 확인 및 이에 따른 가중치 테이블 추가
