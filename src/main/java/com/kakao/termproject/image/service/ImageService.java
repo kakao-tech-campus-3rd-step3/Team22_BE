@@ -22,10 +22,10 @@ public class ImageService {
 
   @Transactional
   public ImageResponse upload(Long postId, List<MultipartFile> files) {
-    List<String> images = s3Service.upload(files);
-
     Post post = postRepository.findById(postId)
       .orElseThrow(() -> new DataNotFoundException("게시글이 존재하지 않습니다."));
+
+    List<String> images = s3Service.upload(files);
 
     List<Image> imageEntities = images.stream()
       .map(imageName -> new Image(imageName, post))
