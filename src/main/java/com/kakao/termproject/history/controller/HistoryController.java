@@ -2,7 +2,6 @@ package com.kakao.termproject.history.controller;
 
 import com.kakao.termproject.exception.ErrorResult;
 import com.kakao.termproject.history.dto.HistoryResponse;
-import com.kakao.termproject.history.dto.PagedQuery;
 import com.kakao.termproject.history.service.HistoryService;
 import com.kakao.termproject.user.domain.Member;
 import com.kakao.termproject.walk.dto.WalkData;
@@ -17,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -43,7 +43,6 @@ public class HistoryController {
     @AuthenticationPrincipal Member member,
     @RequestBody @Valid WalkData data
   ) {
-    log.info("History save Request");
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(historyService.saveHistory(data, member));
   }
@@ -74,18 +73,16 @@ public class HistoryController {
     @AuthenticationPrincipal Member member,
     @PathVariable Long id
   ) {
-    log.info("History get request");
     return ResponseEntity.ok(historyService.getHistory(id, member));
   }
 
   @ApiResponse(responseCode = "200", description = "조회 성공")
-  @Operation(summary = "조회", description = "현재 로그인되어있는 유저의 산책 기록을 전부 반환합니다. 페이지네이션 관련 인자를 쿼리파라미터로 넣어 조회할 수 있습니다. Authorization 헤더를 추가하여 인증 인가 과정을 거칩니다.")
+  @Operation(summary = "조회", description = "현재 로그인되어있는 유저의 산책 기록을 전부 반환합니다. 페이지네이션 관련 인자(page, size, sort)를 쿼리파라미터로 넣어 조회할 수 있습니다. Authorization 헤더를 추가하여 인증 인가 과정을 거칩니다.")
   @GetMapping
   public ResponseEntity<Page<HistoryResponse>> getHistoryList(
     @AuthenticationPrincipal Member member,
-    PagedQuery pagedQuery
+    Pageable pageable
   ) {
-    log.info("History get list request");
-    return ResponseEntity.ok(historyService.getAllHistories(member, pagedQuery));
+    return ResponseEntity.ok(historyService.getAllHistories(member, pageable));
   }
 }
