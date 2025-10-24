@@ -77,7 +77,7 @@ public class ImageController {
   }
 
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "조회 성공"),
+    @ApiResponse(responseCode = "204", description = "삭제 성공"),
     @ApiResponse(responseCode = "404", description = "게시글이 존재하지 않는 경우",
       content = @Content(schema = @Schema(implementation = ErrorResult.class),
         examples = @ExampleObject(
