@@ -50,4 +50,8 @@ public class Post {
     this.title = title;
     this.content = content;
   }
+
+  public boolean isOwner(Member member) {
+    return this.member.getId().equals(member.getId());
+  }
 }

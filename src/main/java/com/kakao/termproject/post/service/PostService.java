@@ -66,7 +66,7 @@ public class PostService {
     Post post = postRepository.findById(id)
       .orElseThrow(() -> new DataNotFoundException("해당 게시글을 찾을 수 없습니다."));
 
-    if (!post.getMember().getId().equals(member.getId())) {
+    if (!post.isOwner(member)) {
       throw new OwnerMismatchException("접근 권한이 없습니다.");
     }
 
