@@ -20,7 +20,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+public class UploadService {
 
   private final S3Client s3Client;
   private final ImageProperties imageProperties;

@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ImageService {
 
-  private final S3Service s3Service;
+  private final UploadService uploadService;
   private final ImageRepository imageRepository;
   private final PostRepository postRepository;
 
@@ -25,7 +25,7 @@ public class ImageService {
     Post post = postRepository.findById(postId)
       .orElseThrow(() -> new DataNotFoundException("게시글이 존재하지 않습니다."));
 
-    List<String> images = s3Service.upload(files);
+    List<String> images = uploadService.upload(files);
 
     List<Image> imageEntities = images.stream()
       .map(imageName -> new Image(imageName, post))
@@ -46,7 +46,7 @@ public class ImageService {
       .map(Image::getName)
       .toList();
 
-    return s3Service.getImages(images);
+    return uploadService.getImages(images);
   }
 
   @Transactional
@@ -59,7 +59,7 @@ public class ImageService {
       .map(Image::getName)
       .toList();
 
-    s3Service.delete(images);
+    uploadService.delete(images);
     imageRepository.deleteByPost(post);
   }
 }
