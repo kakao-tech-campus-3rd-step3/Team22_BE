@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -61,12 +62,12 @@ public class UploadService {
   }
 
   private String getExtension(String fileName) {
-    String ext = fileName.substring(fileName.lastIndexOf("."));
-    if (fileName.lastIndexOf(".") == -1 || !imageProperties.allowedExtensions().contains(ext)) {
+    String ext = StringUtils.getFilenameExtension(fileName);
+    if (ext == null || !imageProperties.allowedExtensions().contains("." + ext)) {
       throw new BadFormatException();
     }
 
-    return ext;
+    return "." + ext;
   }
 
   public List<String> getImages(List<String> fileNames) {
