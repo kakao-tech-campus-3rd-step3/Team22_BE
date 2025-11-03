@@ -37,14 +37,12 @@ public class PostController {
     @AuthenticationPrincipal Member member,
     @RequestBody @Valid PostRequest postRequest
   ) {
-    log.info("Post request");
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(postService.savePost(postRequest, member));
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
-    log.info("get post id: {}", id);
     return ResponseEntity.ok(postService.getPost(id));
   }
 
@@ -53,10 +51,7 @@ public class PostController {
     @RequestParam(required = false) Long memberId,
     Pageable pageable
   ) {
-    log.info("get posts");
-
     if (memberId != null) {
-      log.info("memberId: {}", memberId);
       return ResponseEntity.ok(postService.getPostsByMemberId(memberId, pageable));
     }
 
@@ -68,7 +63,6 @@ public class PostController {
     @AuthenticationPrincipal Member member,
     Pageable pageable
   ) {
-    log.info("get my posts");
     return ResponseEntity.ok(postService.getMyPosts(member, pageable));
   }
 
@@ -77,7 +71,6 @@ public class PostController {
     @AuthenticationPrincipal Member member,
     @PathVariable Long id,
     @RequestBody @Valid PostRequest postRequest) {
-    log.info("update post id: {}", id);
     return ResponseEntity.ok(postService.updatePost(id, postRequest, member));
   }
 
@@ -85,7 +78,6 @@ public class PostController {
   public ResponseEntity<Void> deletePost(
     @AuthenticationPrincipal Member member,
     @PathVariable Long id) {
-    log.info("delete post id: {}", id);
     postService.deletePost(id, member);
     return ResponseEntity.noContent().build();
   }

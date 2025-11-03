@@ -51,7 +51,6 @@ public class WalkController {
   public ResponseEntity<WalkResponse> getWalk(
     @AuthenticationPrincipal Member member
   ) {
-    log.info("get Walk data for member: {}", member);
     return ResponseEntity.ok(walkService.getWalk(member));
   }
 
@@ -73,7 +72,6 @@ public class WalkController {
   public ResponseEntity<WalkResponse> saveWalk(
     @AuthenticationPrincipal Member member,
     @RequestBody WalkData data) {
-    log.info("Walk save Request");
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(walkService.saveWalk(member, data));
   }
@@ -96,7 +94,6 @@ public class WalkController {
   public ResponseEntity<WalkResponse> updateWalk(
     @AuthenticationPrincipal Member member,
     @RequestBody WalkData data) {
-    log.info("Walk update Request");
     return ResponseEntity.ok(walkService.updateWalk(member, data));
   }
 }
