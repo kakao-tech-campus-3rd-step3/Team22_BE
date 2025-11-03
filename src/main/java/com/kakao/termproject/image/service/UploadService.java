@@ -1,15 +1,15 @@
 package com.kakao.termproject.image.service;
 
-import com.kakao.termproject.exception.custom.BadFormatException;
 import com.kakao.termproject.exception.custom.FailedToUploadException;
+import com.kakao.termproject.image.dto.UploadRequest;
+import com.kakao.termproject.image.event.DeleteEvent;
+import com.kakao.termproject.image.event.UploadEvent;
 import com.kakao.termproject.image.properties.ImageProperties;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -26,15 +26,13 @@ public class UploadService {
   private final S3Client s3Client;
   private final ImageProperties imageProperties;
 
-  public List<String> upload(List<MultipartFile> files) {
-    List<String> results = new ArrayList<>();
+  @TransactionalEventListener
+  public void upload(UploadEvent event) {
+    List<UploadRequest> images = event.uploadRequests();
 
-    files.forEach(file -> {
-      if (file.getSize() > imageProperties.maxFileSize()) {
-        throw new FailedToUploadException("파일 크기는 최대 10MB를 넘길 수 없습니다.");
-      }
-
-      String fileName = createUniqueName(file.getOriginalFilename());
+    images.forEach(image -> {
+      String fileName = image.fileName();
+      MultipartFile file = image.file();
 
       try {
         s3Client.putObject(
@@ -50,24 +48,7 @@ public class UploadService {
       } catch (SdkException e) {
         throw new FailedToUploadException("S3 업로드 중 오류가 발생했습니다.");
       }
-
-      results.add(fileName);
     });
-
-    return results;
-  }
-
-  private String createUniqueName(String fileName) {
-    return UUID.randomUUID().toString().concat(getExtension(fileName));
-  }
-
-  private String getExtension(String fileName) {
-    String ext = StringUtils.getFilenameExtension(fileName);
-    if (ext == null || !imageProperties.allowedExtensions().contains("." + ext)) {
-      throw new BadFormatException();
-    }
-
-    return "." + ext;
   }
 
   public List<String> getImages(List<String> fileNames) {
@@ -78,7 +59,10 @@ public class UploadService {
       .toList();
   }
 
-  public void delete(List<String> files) {
+  @TransactionalEventListener
+  public void delete(DeleteEvent event) {
+    List<String> files = event.images();
+
     List<ObjectIdentifier> objects = files.stream()
       .map(file -> ObjectIdentifier.builder()
         .key(imageProperties.filePath() + file)
